@@ -9,7 +9,7 @@ export function ReviewCard({ review }: { review: Review }) {
   const pkg = PACKAGES.find((p) => p.slug === review.packageSlug);
 
   return (
-    <article className="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/70 hover:shadow-[0_24px_50px_-32px_rgba(0,0,0,0.5)]">
+    <article className="group h-full relative flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/70 hover:shadow-[0_24px_50px_-32px_rgba(0,0,0,0.5)]">
       {review.photos[0] && (
         <PhotoFrame className="aspect-[4/3]">
           <Photo

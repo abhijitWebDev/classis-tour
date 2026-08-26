@@ -63,7 +63,7 @@ export function SiteFooter() {
         <div className="mt-16 flex flex-col gap-4 border-t border-border pt-8 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} {COMPANY.legalName}. All rights reserved.</p>
           <p className="tabular">
-            All prices in Indian Rupees, per traveller, inclusive of taxes and permits.
+            Pricing is quoted against your brief. Nothing on this site carries a rate card.
           </p>
         </div>
       </div>

@@ -65,7 +65,7 @@ function EmptyState({ onReset }: { onReset: () => void }) {
       <h2 className="display mt-6 text-3xl">Nothing matches, yet</h2>
       <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
         We plan nine journeys rather than nine hundred, so a narrow filter can empty the
-        page. Widen the budget or clear the month — several of these only operate in a
+        page. Clear the month or widen the length — several of these only operate in a
         particular season.
       </p>
       <Button onClick={onReset} variant="outline" className="mt-7 h-10 rounded-full px-5">

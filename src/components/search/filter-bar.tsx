@@ -1,11 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { Search, SlidersHorizontal, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Search, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Slider } from "@/components/ui/slider";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -15,16 +12,7 @@ import {
 } from "@/components/ui/select";
 import { REGIONS, TRIP_TYPES, REGION_LABEL, TRIP_TYPE_LABEL } from "@/lib/data";
 import { MONTHS } from "@/lib/pricing";
-import {
-  BUDGET_MAX,
-  BUDGET_MIN,
-  DEFAULT_FILTERS,
-  DURATIONS,
-  SORTS,
-  activeFilterCount,
-  type Filters,
-} from "@/lib/filters";
-import { useCurrency } from "@/lib/store";
+import { DURATIONS, SORTS, activeFilterCount, type Filters } from "@/lib/filters";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -36,17 +24,7 @@ type Props = {
 };
 
 export function FilterBar({ filters, onChange, onReset, resultCount, totalCount }: Props) {
-  const { format } = useCurrency();
   const active = activeFilterCount(filters);
-  // The slider is uncommitted until release, so it holds a draft that resyncs
-  // during render whenever the committed value changes elsewhere (a chip clear,
-  // a back navigation).
-  const [draft, setDraft] = React.useState({ committed: filters.budget, value: filters.budget });
-  if (draft.committed !== filters.budget) {
-    setDraft({ committed: filters.budget, value: filters.budget });
-  }
-  const draftBudget = draft.value;
-  const setDraftBudget = (v: number) => setDraft((d) => ({ ...d, value: v }));
 
   return (
     <div className="sticky top-16 z-30 border-b border-border bg-background/92 backdrop-blur-xl sm:top-[72px]">
@@ -126,46 +104,6 @@ export function FilterBar({ filters, onChange, onReset, resultCount, totalCount 
             ))}
           </Control>
 
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className={cn(
-                  "h-10 gap-2 rounded-lg px-3 text-sm font-normal",
-                  filters.budget < BUDGET_MAX && "border-gold bg-gold-soft/50"
-                )}
-              >
-                <SlidersHorizontal className="size-3.5" strokeWidth={1.6} />
-                {filters.budget < BUDGET_MAX ? `Up to ${format(filters.budget)}` : "Budget"}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent align="start" className="w-80 p-5">
-              <div className="flex items-baseline justify-between">
-                <span className="eyebrow">Budget per traveller</span>
-                <span className="tabular text-sm font-semibold">
-                  {draftBudget >= BUDGET_MAX ? "No limit" : format(draftBudget)}
-                </span>
-              </div>
-              <Slider
-                className="mt-5"
-                min={BUDGET_MIN}
-                max={BUDGET_MAX}
-                step={5000}
-                value={[draftBudget]}
-                onValueChange={([v]) => setDraftBudget(v)}
-                onValueCommit={([v]) => onChange({ budget: v })}
-              />
-              <div className="tabular mt-2.5 flex justify-between text-[11px] text-muted-foreground">
-                <span>{format(BUDGET_MIN)}</span>
-                <span>{format(BUDGET_MAX)}+</span>
-              </div>
-              <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
-                Compares against the all-in per-traveller price including taxes and the
-                flights &amp; permits component — not a stripped &ldquo;from&rdquo; figure.
-              </p>
-            </PopoverContent>
-          </Popover>
-
           <div className="ml-auto flex items-center gap-2">
             <span className="tabular hidden text-xs text-muted-foreground sm:block">
               <strong className="font-semibold text-foreground">{resultCount}</strong> of {totalCount}
@@ -202,12 +140,6 @@ export function FilterBar({ filters, onChange, onReset, resultCount, totalCount 
             )}
             {filters.month >= 0 && (
               <Chip label={`Departing ${MONTHS[filters.month]}`} onClear={() => onChange({ month: -1 })} />
-            )}
-            {filters.budget < BUDGET_MAX && (
-              <Chip
-                label={`Under ${format(filters.budget)}`}
-                onClear={() => onChange({ budget: DEFAULT_FILTERS.budget })}
-              />
             )}
             <button
               onClick={onReset}

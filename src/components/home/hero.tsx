@@ -1,68 +1,130 @@
 import Link from "next/link";
-import { ArrowDown } from "lucide-react";
+import { ArrowRight, ChevronDown } from "lucide-react";
 import { Photo } from "@/components/site/photo";
-import { HeroSearch } from "@/components/search/hero-search";
+import { Button } from "@/components/ui/button";
 import { photo } from "@/lib/images";
+import { CAPABILITY_STRIP } from "@/lib/company";
 
+const HERO_ID = "1511578314322-379afb476865";
+const HERO_SRC = photo(HERO_ID, 1920);
+/** 48px wide. Arrives in one packet and is blurred up, so the fold is never flat black. */
+const HERO_LQIP = photo(HERO_ID, 48);
+
+/**
+ * Picture first, and the one place on the site that animates on load: the
+ * eyebrow, headline, standfirst and actions rise in sequence over a slow
+ * ken-burns drift. Copy stays at four lines — the photograph does the work.
+ */
 export function Hero() {
   return (
-    <section className="relative">
-      <div className="relative min-h-[92vh] w-full overflow-hidden bg-ink">
-        <Photo
-          src={photo("1506905925346-21bda4d32df4", 2400)}
-          fallbackSeed="classis-hero"
-          loading="eager"
-          drift
-          className="absolute inset-0"
-          alt="A high-altitude lake at first light in Ladakh"
-        />
-        <div className="absolute inset-0 scrim-bottom" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/45 via-transparent to-transparent" />
+    <section className="relative min-h-[100svh] w-full overflow-hidden bg-ink">
+      {/* React 19 hoists this to <head>, so the hero starts downloading with
+          the document rather than after the stylesheet resolves. */}
+      <link rel="preload" as="image" href={HERO_SRC} fetchPriority="high" />
 
-        <div className="relative mx-auto flex min-h-[92vh] max-w-[1400px] flex-col justify-end px-5 pt-32 pb-44 lg:px-10">
-          <span className="text-[11px] font-medium tracking-[0.34em] text-white/70 uppercase">
-            Classis Tour · Est. 2009
-          </span>
-          <h1 className="display mt-6 max-w-4xl text-[clamp(2.75rem,7.5vw,6rem)] text-white">
-            Nine journeys,
-            <br />
-            planned to the hour
-            <br />
-            <span className="italic text-gold">and paced to the day.</span>
-          </h1>
-          <p className="mt-7 max-w-lg text-[15px] leading-relaxed text-white/80">
-            We are not an inventory. Each of these is a route we have walked, a household
-            we know and a season we watch — priced honestly, bookable in full, and yours to
-            filter, compare and save.
-          </p>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={HERO_LQIP}
+        alt=""
+        aria-hidden
+        className="absolute inset-0 h-full w-full scale-110 object-cover blur-2xl"
+      />
 
-          <div className="mt-9 flex flex-wrap items-center gap-x-8 gap-y-3">
-            <Link
-              href="/packages"
-              className="group inline-flex items-center gap-2 text-sm font-medium text-white"
-            >
-              <span className="border-b border-gold pb-1">Browse all nine journeys</span>
-              <ArrowDown className="size-4 text-gold transition-transform group-hover:translate-y-0.5" />
+      <Photo
+        src={HERO_SRC}
+        fallbackSeed="classis-mice-hero"
+        loading="eager"
+        fetchPriority="high"
+        drift
+        className="absolute inset-0"
+        alt="A conference hall set for a plenary, screens up and tables laid"
+      />
+
+      {/*
+        Scrims are weighted left, where the type sits, and released across the
+        right so the hall stays bright. Hero photography must have no legible
+        third-party event branding in it — on a real company's homepage that
+        reads as a claim about whose event it was.
+      */}
+      <div className="absolute inset-0 scrim-bottom" />
+      {/* The hall floor is pale; the standfirst, buttons and capability strip all
+          sit over it and need their own ground. */}
+      <div className="absolute inset-x-0 bottom-0 h-[46%] bg-gradient-to-t from-black/92 via-black/62 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/82 via-black/22 via-42% to-transparent" />
+      <div className="pointer-events-none absolute inset-0 [background:radial-gradient(125%_90%_at_62%_38%,transparent_50%,rgba(0,0,0,0.32)_100%)]" />
+
+      <div className="relative mx-auto flex min-h-[100svh] max-w-[1400px] flex-col justify-end px-5 pt-32 pb-14 lg:px-10 lg:pb-16">
+        <span
+          className="rise flex items-center gap-3 text-[11px] font-medium tracking-[0.34em] text-white/70 uppercase"
+          style={{ animationDelay: "120ms" }}
+        >
+          <span className="h-px w-8 bg-gold" />
+          Mumbai · MICE, corporate travel &amp; events
+        </span>
+
+        <h1
+          className="rise display mt-7 max-w-4xl text-[clamp(3rem,8vw,6.5rem)] leading-[0.94] text-white"
+          style={{ animationDelay: "240ms" }}
+        >
+          We run the room.
+          <br />
+          <span className="text-gold italic">You run the agenda.</span>
+        </h1>
+
+        <p
+          className="rise mt-8 max-w-lg text-[15.5px] leading-relaxed text-white/80"
+          style={{ animationDelay: "400ms" }}
+        >
+          Conferences, seminars and incentive programmes for companies and hospitals —
+          planned, contracted and staffed end to end.
+        </p>
+
+        <div
+          className="rise mt-10 flex flex-wrap items-center gap-3"
+          style={{ animationDelay: "520ms" }}
+        >
+          <Button
+            asChild
+            className="h-12 gap-2 rounded-full bg-white px-7 text-[14px] text-ink transition-transform hover:translate-y-[-1px] hover:bg-white"
+          >
+            <Link href="/mice#brief">
+              Send us a brief
+              <ArrowRight className="size-4" />
             </Link>
-            <p className="tabular text-xs text-white/55">
-              4.8 average across 982 reviewed departures
-            </p>
-          </div>
+          </Button>
+          <Button
+            asChild
+            variant="outline"
+            className="h-12 rounded-full border-white/35 bg-white/5 px-7 text-[14px] text-white backdrop-blur-sm hover:bg-white/15 hover:text-white"
+          >
+            <Link href="/corporate">Corporate travel</Link>
+          </Button>
         </div>
+
+        {/* Capability strip — the credibility line, without inventing numbers. */}
+        <ul
+          className="rise mt-14 grid gap-x-8 gap-y-5 border-t border-white/15 pt-7 sm:grid-cols-2 lg:grid-cols-4"
+          style={{ animationDelay: "660ms" }}
+        >
+          {CAPABILITY_STRIP.map((item) => (
+            <li key={item.label}>
+              <span className="block text-[13px] leading-snug font-medium text-white text-balance">
+                {item.label}
+              </span>
+              <span className="mt-1 block text-[11px] tracking-wide text-white/50">
+                {item.detail}
+              </span>
+            </li>
+          ))}
+        </ul>
       </div>
 
-      {/* The tool, overlapping the photograph — search is not buried below the fold. */}
-      <div className="relative z-20 mx-auto -mt-28 max-w-[1400px] px-5 lg:px-10">
-        <div className="mb-3 flex items-baseline justify-between">
-          <span className="text-[11px] font-medium tracking-[0.24em] text-white/80 uppercase">
-            Find your journey
-          </span>
-          <span className="hidden text-[11px] text-white/70 sm:block">
-            Filter by region, trip type, length and budget
-          </span>
-        </div>
-        <HeroSearch />
-      </div>
+      <span
+        aria-hidden
+        className="animate-cue pointer-events-none absolute bottom-5 left-1/2 hidden -translate-x-1/2 text-white/70 lg:block"
+      >
+        <ChevronDown className="size-5" strokeWidth={1.4} />
+      </span>
     </section>
   );
 }

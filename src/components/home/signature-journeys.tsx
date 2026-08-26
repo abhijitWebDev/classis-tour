@@ -18,9 +18,9 @@ export function SignatureJourneys() {
   return (
     <Section>
       <SectionHeader
-        eyebrow="Our journeys"
-        title="Four of the nine, with the numbers attached"
-        blurb="Every price is per traveller, all-in, and moves with the month and the size of your party."
+        eyebrow="Incentive travel"
+        title="Programmes people compete to be sent on"
+        blurb="The same planning we apply to a conference, applied to a reward trip. Quoted per group, against your brief."
         href="/packages"
         linkLabel="See all nine"
       />

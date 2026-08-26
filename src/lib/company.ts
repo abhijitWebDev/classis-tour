@@ -70,3 +70,16 @@ export const LEADERSHIP: Leader[] = [
   { name: "Dr. Rajendra Dhumma", role: "Founder", initials: "RD" },
   { name: "Ajinkya Dhumma", role: "Director", initials: "AD" },
 ];
+
+/**
+ * The strip under the hero. Deliberately capability claims, not achievement
+ * numbers — a stat bar ("450 events delivered") converts better for B2B, but
+ * every figure would be invented, and this is a real company. Swap this for
+ * `{ figure, label }` pairs the moment the client supplies real numbers.
+ */
+export const CAPABILITY_STRIP: { label: string; detail: string }[] = [
+  { label: "Headquartered in Mumbai", detail: "Operating worldwide" },
+  { label: "Corporate, hospital & association clients", detail: "Delegations of 10 to 500+" },
+  { label: "Conferences, seminars, exhibitions, incentives", detail: "Four formats, one team" },
+  { label: "Venue, logistics, production, on-site", detail: "End to end, no handoffs" },
+];

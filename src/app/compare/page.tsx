@@ -3,7 +3,7 @@ import { CompareView } from "@/components/compare/compare-view";
 
 export const metadata: Metadata = {
   title: "Compare journeys",
-  description: "Stack up to three journeys side by side — price, length, pace, route and inclusions, quoted for the same party.",
+  description: "Stack up to three journeys side by side — length, pace, route, season and inclusions, set to the same party.",
 };
 
 export default function ComparePage() {

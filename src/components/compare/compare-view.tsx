@@ -16,10 +16,10 @@ import { Photo } from "@/components/site/photo";
 import { Stars } from "@/components/site/stars";
 import { SaveButton } from "@/components/site/save-button";
 import { PACKAGES, REGION_LABEL, TRIP_TYPE_LABEL } from "@/lib/data";
-import { quote, seasonBand, SEASON_BAND_LABEL, MONTHS } from "@/lib/pricing";
+import { MONTHS, SEASON_BAND_LABEL, seasonBand } from "@/lib/pricing";
 import { firstOfMonth } from "@/lib/filters";
 import { selectionToParams, stripTime } from "@/lib/booking";
-import { useCurrency, useTrips, COMPARE_LIMIT } from "@/lib/store";
+import { useTrips, COMPARE_LIMIT } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
 /**
@@ -28,7 +28,6 @@ import { cn } from "@/lib/utils";
  */
 export function CompareView() {
   const { compare, toggleCompare, clearCompare, ready } = useTrips();
-  const { format } = useCurrency();
 
   const [adults, setAdults] = React.useState(2);
   const [children, setChildren] = React.useState(0);
@@ -38,21 +37,11 @@ export function CompareView() {
     .map((slug) => PACKAGES.find((p) => p.slug === slug))
     .filter((p): p is (typeof PACKAGES)[number] => Boolean(p));
 
-  const quotes = packages.map((pkg) => {
-    const start = stripTime(firstOfMonth(month));
-    const operating = pkg.seasonality[month] > 0;
-    return {
-      pkg,
-      start,
-      operating,
-      q: operating
-        ? quote({ pkg, adults, children, start, roomId: pkg.rooms[0].id, addOnIds: [] })
-        : null,
-    };
-  });
-
-  const prices = quotes.map((x) => x.q?.total ?? Infinity);
-  const cheapest = Math.min(...prices);
+  const quotes = packages.map((pkg) => ({
+    pkg,
+    start: stripTime(firstOfMonth(month)),
+    operating: pkg.seasonality[month] > 0,
+  }));
 
   if (!ready) return <div className="h-[40vh]" />;
 
@@ -65,7 +54,7 @@ export function CompareView() {
       {/* shared party controls */}
       <div className="flex flex-wrap items-end gap-x-8 gap-y-4 rounded-xl border border-border bg-card p-5">
         <div>
-          <span className="eyebrow">Priced for</span>
+          <span className="eyebrow">Comparing for</span>
           <div className="mt-2 flex items-center gap-4">
             <Counter label="Adults" value={adults} min={1} max={10} onChange={setAdults} />
             <Counter label="Children" value={children} min={0} max={6} onChange={setChildren} />
@@ -87,8 +76,8 @@ export function CompareView() {
           </Select>
         </div>
         <p className="max-w-xs text-[11.5px] leading-relaxed text-muted-foreground">
-          Every column below is quoted for the same party in the same month, in the
-          entry-level room, with no add-ons.
+          Every column below is set to the same party in the same month, so what differs
+          is the journey. Pricing comes with the proposal.
         </p>
         <button
           onClick={clearCompare}
@@ -137,22 +126,14 @@ export function CompareView() {
           </thead>
 
           <tbody className="text-[13px]">
-            <Row label="All-in price">
-              {quotes.map(({ pkg, q, operating }) => (
+            <Row label="Availability">
+              {quotes.map(({ pkg, operating }) => (
                 <Cell key={pkg.slug}>
-                  {operating && q ? (
+                  {operating ? (
                     <>
-                      <span
-                        className={cn(
-                          "tabular display block text-2xl",
-                          q.total === cheapest && "text-gold"
-                        )}
-                      >
-                        {format(q.total)}
-                      </span>
-                      <span className="tabular mt-0.5 block text-[11px] text-muted-foreground">
-                        {format(q.perTraveller)} per traveller
-                        {q.total === cheapest && packages.length > 1 && " · lowest here"}
+                      <span className="display block text-[19px]">Operating</span>
+                      <span className="mt-0.5 block text-[11px] text-muted-foreground">
+                        Pricing quoted on request
                       </span>
                     </>
                   ) : (

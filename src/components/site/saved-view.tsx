@@ -5,12 +5,10 @@ import { HeartCrack } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PackageCard } from "@/components/search/package-card";
 import { PACKAGES } from "@/lib/packages";
-import { useCurrency, useTrips } from "@/lib/store";
-import { fromPriceINR } from "@/lib/pricing";
+import { useTrips } from "@/lib/store";
 
 export function SavedView() {
   const { saved, ready } = useTrips();
-  const { format } = useCurrency();
 
   if (!ready) return <div className="h-[40vh]" />;
 
@@ -34,7 +32,6 @@ export function SavedView() {
     );
   }
 
-  const cheapest = Math.min(...items.map(fromPriceINR));
   const nights = items.reduce((s, p) => s + p.nights, 0);
 
   return (
@@ -42,7 +39,7 @@ export function SavedView() {
       <dl className="tabular flex flex-wrap gap-x-10 gap-y-4 border-b border-border pb-6">
         <Stat label="Saved" value={String(items.length)} />
         <Stat label="Nights in total" value={String(nights)} />
-        <Stat label="Lowest all-in" value={format(cheapest)} />
+        <Stat label="Countries" value={String(new Set(items.map((p) => p.country)).size)} />
         <Stat
           label="Regions"
           value={String(new Set(items.map((p) => p.region)).size)}

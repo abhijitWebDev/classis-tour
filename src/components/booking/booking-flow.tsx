@@ -8,8 +8,6 @@ import {
   ArrowRight,
   BadgeCheck,
   Check,
-  CreditCard,
-  Lock,
   Printer,
 } from "lucide-react";
 
@@ -25,9 +23,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { DepartureField, SeasonLegend, Stepper } from "@/components/package/controls";
-import { PriceBreakdown } from "@/components/package/price-breakdown";
-import { ClosedSeasonNote } from "@/components/package/price-calculator";
+import {
+  ClosedSeasonNote,
+  DepartureField,
+  SeasonLegend,
+  Stepper,
+} from "@/components/package/controls";
 import { Photo } from "@/components/site/photo";
 import type { Package } from "@/lib/types";
 import { quote, endDate } from "@/lib/pricing";
@@ -39,17 +40,13 @@ import {
   type Selection,
 } from "@/lib/booking";
 import { firstOfMonth } from "@/lib/filters";
-import { useCurrency } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
 const STEPS = [
   { id: 1, label: "Dates & travellers" },
   { id: 2, label: "Rooms & additions" },
   { id: 3, label: "Who is travelling" },
-  { id: 4, label: "Deposit" },
 ];
-
-const DEPOSIT_RATE = 0.2;
 
 type Lead = {
   firstName: string;
@@ -71,15 +68,12 @@ const EMPTY_LEAD: Lead = {
 
 export function BookingFlow({ pkg }: { pkg: Package }) {
   const params = useSearchParams();
-  const { format } = useCurrency();
 
   const [sel, setSel] = React.useState<Selection>(() =>
     selectionFromParams(pkg, new URLSearchParams(params.toString()))
   );
   const [step, setStep] = React.useState(1);
   const [lead, setLead] = React.useState<Lead>(EMPTY_LEAD);
-  const [payMode, setPayMode] = React.useState<"deposit" | "full">("deposit");
-  const [agreed, setAgreed] = React.useState(false);
   const [submitted, setSubmitted] = React.useState(false);
   const [touched, setTouched] = React.useState(false);
 
@@ -98,11 +92,6 @@ export function BookingFlow({ pkg }: { pkg: Package }) {
     [pkg, sel]
   );
 
-  const dueNow = payMode === "deposit" ? Math.round(q.total * DEPOSIT_RATE) : q.total;
-  const balance = q.total - dueNow;
-  const balanceDue = new Date(sel.start);
-  balanceDue.setDate(balanceDue.getDate() - 45);
-
   const leadValid =
     lead.firstName.trim().length > 1 &&
     lead.lastName.trim().length > 1 &&
@@ -115,15 +104,7 @@ export function BookingFlow({ pkg }: { pkg: Package }) {
 
   if (submitted) {
     return (
-      <Confirmation
-        pkg={pkg}
-        sel={sel}
-        lead={lead}
-        total={q.total}
-        dueNow={dueNow}
-        balance={balance}
-        balanceDue={balanceDue}
-      />
+      <Confirmation pkg={pkg} sel={sel} lead={lead} />
     );
   }
 
@@ -256,13 +237,12 @@ export function BookingFlow({ pkg }: { pkg: Package }) {
                           <span className="mt-1 block text-[12.5px] leading-relaxed text-muted-foreground">
                             {a.description}
                           </span>
-                          <span className="tabular mt-2 block text-[12px] font-semibold">
-                            {a.price === 0 ? "No extra charge" : format(a.price)}
-                            <span className="font-normal text-muted-foreground">
-                              {a.unit === "per-traveller" && a.price > 0
-                                ? ` · per traveller (${format(a.price * q.travellers)} total)`
-                                : " · per booking"}
-                            </span>
+                          <span className="mt-2 block text-[12px] text-muted-foreground">
+                            {a.price === 0
+                              ? "Included"
+                              : a.unit === "per-traveller"
+                                ? "Quoted per traveller"
+                                : "Quoted per booking"}
                           </span>
                         </span>
                       </label>
@@ -277,7 +257,7 @@ export function BookingFlow({ pkg }: { pkg: Package }) {
           {step === 3 && (
             <StepBody
               title="Who is travelling"
-              note="We only need the lead traveller now. Passport details for everyone follow by secure link once the deposit clears."
+              note="We only need the lead contact now. Passport details for the party follow once the proposal is agreed."
             >
               <div className="mt-6 grid max-w-2xl gap-5 sm:grid-cols-2">
                 <Field label="First name" required>
@@ -353,71 +333,6 @@ export function BookingFlow({ pkg }: { pkg: Package }) {
             </StepBody>
           )}
 
-          {/* ------------------------------------------------- step 4 */}
-          {step === 4 && (
-            <StepBody
-              title="Confirm and pay the deposit"
-              note="A 20% deposit confirms the dates and starts the permit work. The balance is due 45 days before departure."
-            >
-              <div className="mt-6 max-w-2xl space-y-6">
-                <RadioGroup
-                  value={payMode}
-                  onValueChange={(v) => setPayMode(v as "deposit" | "full")}
-                  className="gap-3"
-                >
-                  <PayOption
-                    value="deposit"
-                    active={payMode === "deposit"}
-                    title={`Pay ${format(Math.round(q.total * DEPOSIT_RATE))} deposit now`}
-                    detail={`Balance of ${format(q.total - Math.round(q.total * DEPOSIT_RATE))} due ${formatDateLong(balanceDue)}`}
-                  />
-                  <PayOption
-                    value="full"
-                    active={payMode === "full"}
-                    title={`Pay ${format(q.total)} in full`}
-                    detail="Nothing further to pay. Free date change up to 60 days before departure."
-                  />
-                </RadioGroup>
-
-                <div className="rounded-xl border border-border bg-card p-5">
-                  <div className="flex items-center gap-2">
-                    <CreditCard className="size-4 text-muted-foreground" strokeWidth={1.6} />
-                    <span className="text-[13px] font-medium">Card details</span>
-                    <span className="ml-auto inline-flex items-center gap-1 text-[11px] text-muted-foreground">
-                      <Lock className="size-3" /> Encrypted
-                    </span>
-                  </div>
-                  <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                    <div className="sm:col-span-2">
-                      <Field label="Card number">
-                        <Input placeholder="4242 4242 4242 4242" className="tabular h-11" inputMode="numeric" />
-                      </Field>
-                    </div>
-                    <Field label="Expiry">
-                      <Input placeholder="MM / YY" className="tabular h-11" inputMode="numeric" />
-                    </Field>
-                    <Field label="CVC">
-                      <Input placeholder="123" className="tabular h-11" inputMode="numeric" />
-                    </Field>
-                  </div>
-                  <p className="mt-4 rounded-md bg-secondary px-3 py-2 text-[11.5px] leading-relaxed text-muted-foreground">
-                    This is a demonstration build — no card is charged and nothing entered
-                    here is transmitted or stored.
-                  </p>
-                </div>
-
-                <label className="flex cursor-pointer gap-3 text-[12.5px] leading-relaxed text-muted-foreground">
-                  <Checkbox checked={agreed} onCheckedChange={(c) => setAgreed(Boolean(c))} className="mt-0.5" />
-                  <span>
-                    I have read the booking conditions, the cancellation schedule and the
-                    insurance requirement. I understand travel insurance is mandatory on
-                    this journey.
-                  </span>
-                </label>
-              </div>
-            </StepBody>
-          )}
-
           {/* ------------------------------------------------- nav */}
           <div className="mt-10 flex items-center justify-between gap-4 border-t border-border pt-6">
             {step > 1 ? (
@@ -434,17 +349,11 @@ export function BookingFlow({ pkg }: { pkg: Package }) {
               </Button>
             )}
 
-            {step < 4 ? (
+            {step < 3 ? (
               <Button
                 className="h-11 gap-2 rounded-full px-6"
                 disabled={step === 1 && q.closed}
-                onClick={() => {
-                  if (step === 3) {
-                    setTouched(true);
-                    if (!leadValid) return;
-                  }
-                  setStep(step + 1);
-                }}
+                onClick={() => setStep(step + 1)}
               >
                 Continue
                 <ArrowRight className="size-4" />
@@ -452,11 +361,13 @@ export function BookingFlow({ pkg }: { pkg: Package }) {
             ) : (
               <Button
                 className="h-11 gap-2 rounded-full px-6"
-                disabled={!agreed}
-                onClick={() => setSubmitted(true)}
+                onClick={() => {
+                  setTouched(true);
+                  if (leadValid) setSubmitted(true);
+                }}
               >
-                <Lock className="size-4" />
-                Confirm — {format(dueNow)}
+                Request a proposal
+                <ArrowRight className="size-4" />
               </Button>
             )}
           </div>
@@ -481,26 +392,20 @@ export function BookingFlow({ pkg }: { pkg: Package }) {
                   </span>
                 </span>
               </div>
-              <div className="p-4">
-                <PriceBreakdown quote={q} compact />
+              <div className="border-t border-border bg-[color-mix(in_oklch,var(--card),var(--foreground)_3%)] p-4">
+                <span className="block text-[10px] tracking-[0.16em] text-muted-foreground uppercase">
+                  Pricing
+                </span>
+                <span className="display mt-1 block text-[19px]">Quoted on request</span>
+                <p className="mt-1.5 text-[11.5px] leading-relaxed text-muted-foreground">
+                  Cost depends on party size, season and the room and additions you pick
+                  here. We price it against this request.
+                </p>
               </div>
-              {step === 4 && (
-                <div className="border-t border-border bg-[color-mix(in_oklch,var(--card),var(--foreground)_3%)] p-4">
-                  <div className="flex items-baseline justify-between">
-                    <span className="text-[13px] font-medium">Due now</span>
-                    <span className="tabular display text-2xl">{format(dueNow)}</span>
-                  </div>
-                  {balance > 0 && (
-                    <p className="tabular mt-1.5 text-[11.5px] text-muted-foreground">
-                      {format(balance)} due {formatDateLong(balanceDue)}
-                    </p>
-                  )}
-                </div>
-              )}
             </div>
             <p className="mt-3 text-center text-[11px] leading-relaxed text-muted-foreground">
-              Free cancellation for 48 hours after the deposit. Full schedule in the
-              booking conditions.
+              Sending this places no obligation on you. We come back with an itinerary and
+              a price for exactly this party.
             </p>
           </div>
         </aside>
@@ -581,51 +486,8 @@ function Field({
   );
 }
 
-function PayOption({
-  value,
-  active,
-  title,
-  detail,
-}: {
-  value: string;
-  active: boolean;
-  title: string;
-  detail: string;
-}) {
-  return (
-    <label
-      className={cn(
-        "flex cursor-pointer gap-4 rounded-xl border p-4 transition-colors",
-        active ? "border-gold bg-gold-soft/40" : "border-border hover:border-gold/60"
-      )}
-    >
-      <RadioGroupItem value={value} className="mt-1" />
-      <span>
-        <span className="tabular block text-[15px] font-medium">{title}</span>
-        <span className="tabular mt-1 block text-[12.5px] text-muted-foreground">{detail}</span>
-      </span>
-    </label>
-  );
-}
 
-function Confirmation({
-  pkg,
-  sel,
-  lead,
-  total,
-  dueNow,
-  balance,
-  balanceDue,
-}: {
-  pkg: Package;
-  sel: Selection;
-  lead: Lead;
-  total: number;
-  dueNow: number;
-  balance: number;
-  balanceDue: Date;
-}) {
-  const { format } = useCurrency();
+function Confirmation({ pkg, sel, lead }: { pkg: Package; sel: Selection; lead: Lead }) {
   const ref = bookingReference(pkg, sel);
 
   return (
@@ -633,17 +495,17 @@ function Confirmation({
       <div className="rounded-2xl border border-border bg-card p-8 lg:p-12">
         <BadgeCheck className="size-10 text-gold" strokeWidth={1.2} />
         <h1 className="display mt-6 text-[clamp(2rem,4.5vw,3rem)]">
-          Held. Your journey is confirmed.
+          Request received. A proposal follows.
         </h1>
         <p className="mt-4 max-w-lg text-[14.5px] leading-relaxed text-muted-foreground">
-          A confirmation is on its way to{" "}
-          <span className="font-medium text-foreground">{lead.email || "your inbox"}</span>. Your
-          journey designer, who has run this route eleven times, will call within one
-          business day to start on permits and seats.
+          We have your request at{" "}
+          <span className="font-medium text-foreground">{lead.email || "your inbox"}</span>. A
+          journey designer who has run this route will come back within one working day
+          with an itinerary and a price for exactly this party.
         </p>
 
         <dl className="tabular mt-9 grid gap-x-8 gap-y-5 border-y border-border py-7 sm:grid-cols-2">
-          <Row label="Booking reference" value={ref} strong />
+          <Row label="Request reference" value={ref} strong />
           <Row label="Journey" value={pkg.name} />
           <Row label="Departure" value={formatDateLong(sel.start)} />
           <Row label="Return" value={formatDateLong(endDate(sel.start, pkg.nights))} />
@@ -652,12 +514,7 @@ function Confirmation({
             value={`${sel.adults} adults${sel.children ? `, ${sel.children} children` : ""}`}
           />
           <Row label="Accommodation" value={pkg.rooms.find((r) => r.id === sel.roomId)!.name} />
-          <Row label="Paid today" value={format(dueNow)} strong />
-          <Row
-            label={balance > 0 ? "Balance" : "Outstanding"}
-            value={balance > 0 ? `${format(balance)} by ${formatDateLong(balanceDue)}` : "Nothing further"}
-          />
-          <Row label="Trip total" value={format(total)} strong />
+          <Row label="Pricing" value="Quoted with the proposal" strong />
         </dl>
 
         <div className="mt-8 flex flex-wrap gap-3">
@@ -674,8 +531,8 @@ function Confirmation({
         </div>
 
         <p className="mt-8 text-[11.5px] leading-relaxed text-muted-foreground">
-          Demonstration build — no payment has been taken and no personal data has left
-          this browser.
+          Demonstration build — nothing entered here has left this browser, and no mail
+          service is wired up yet.
         </p>
       </div>
     </div>

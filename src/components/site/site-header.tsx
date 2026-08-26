@@ -10,10 +10,10 @@ import { useTrips } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { href: "/packages", label: "Journeys" },
-  { href: "/#destinations", label: "Destinations" },
-  { href: "/corporate", label: "Corporate" },
   { href: "/mice", label: "MICE & Events" },
+  { href: "/corporate", label: "Corporate" },
+  { href: "/#destinations", label: "Destinations" },
+  { href: "/packages", label: "Incentive travel" },
   { href: "/reviews", label: "Reviews" },
   { href: "/about", label: "About" },
 ];
@@ -101,7 +101,7 @@ export function SiteHeader() {
               transparent && "bg-white text-ink hover:bg-white/85"
             )}
           >
-            <Link href="/packages">Plan a journey</Link>
+            <Link href="/mice#brief">Send a brief</Link>
           </Button>
 
           <Sheet open={open} onOpenChange={setOpen}>
@@ -137,8 +137,8 @@ export function SiteHeader() {
                 </Link>
               </nav>
               <Button asChild className="mt-8 h-11 w-full rounded-full">
-                <Link href="/packages" onClick={() => setOpen(false)}>
-                  Plan a journey
+                <Link href="/mice#brief" onClick={() => setOpen(false)}>
+                  Send a brief
                 </Link>
               </Button>
             </SheetContent>

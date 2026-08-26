@@ -69,7 +69,7 @@ export const PACKAGES: Package[] = [
       "International and domestic flights to Leh",
       "Travel insurance (mandatory — we will not depart without it)",
       "Alcohol beyond the welcome dinner",
-      "Camera fees at monasteries (₹100–₹300 each)",
+      "Camera fees at monasteries, payable on site",
       "Gratuities for guides and drivers",
     ],
     route: [

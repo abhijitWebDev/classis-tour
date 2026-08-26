@@ -5,7 +5,7 @@ import { CalendarDays, Minus, Plus } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import type { Package } from "@/lib/types";
-import { blendedSeason, MONTHS_SHORT, SEASON_BAND_LABEL, seasonBand } from "@/lib/pricing";
+import { blendedSeason, MONTHS_SHORT, nextOpenDate, SEASON_BAND_LABEL, seasonBand } from "@/lib/pricing";
 import { endDate } from "@/lib/pricing";
 import { formatDateLong, formatDateShort, stripTime } from "@/lib/booking";
 import { cn } from "@/lib/utils";
@@ -198,5 +198,27 @@ function Legend({ dot, label }: { dot: string; label: string }) {
       <span className={cn("size-1.5 rounded-full", dot)} />
       {label}
     </span>
+  );
+}
+
+/**
+ * Shown when the chosen departure falls inside a month the journey does not
+ * operate — it names the next date that does, rather than just refusing.
+ */
+export function ClosedSeasonNote({ pkg, start }: { pkg: Package; start: Date }) {
+  const next = nextOpenDate(pkg, start);
+  return (
+    <p className="mt-4 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-[12.5px] leading-relaxed text-amber-900">
+      {pkg.name} does not operate on {formatDateLong(start)} — the season is closed.
+      {next ? (
+        <>
+          {" "}
+          The next departure we can run is{" "}
+          <span className="font-semibold">{formatDateLong(next)}</span>.
+        </>
+      ) : (
+        " Talk to us about the following season."
+      )}
+    </p>
   );
 }

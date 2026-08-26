@@ -7,7 +7,7 @@ import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { CompareTray } from "@/components/site/compare-tray";
 
-/** Editorial display face — headlines, destination names, prices at large sizes. */
+/** Editorial display face — headlines, destination and city names at large sizes. */
 const editorial = Fraunces({
   variable: "--font-editorial",
   subsets: ["latin"],
@@ -24,11 +24,11 @@ const ui = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "Classis Tour — Journeys planned properly",
+    default: "Classis Travel and Tours — MICE, corporate travel & events",
     template: "%s · Classis Tour",
   },
   description:
-    "Nine journeys, planned in detail — the Himalaya, the Indian Ocean, Arabia, East Africa, the Mediterranean and the Andes. Search, compare, price and book.",
+    "Mumbai-based travel management: MICE, conferences, corporate travel and incentive programmes for companies and hospitals. Pricing quoted against your brief.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -38,6 +38,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${editorial.variable} ${ui.variable} h-full antialiased`}
       suppressHydrationWarning
     >
+      <head>
+        {/*
+          Scroll-reveal hides its targets in CSS. If JavaScript never runs, the
+          observer never fires, so un-hide everything rather than shipping a
+          blank page.
+        */}
+        <noscript>
+          <style>{`[data-reveal]{opacity:1 !important;transform:none !important}`}</style>
+        </noscript>
+      </head>
       <body className="flex min-h-full flex-col">
         <CurrencyProvider>
           <TripsProvider>

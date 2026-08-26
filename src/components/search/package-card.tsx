@@ -9,8 +9,6 @@ import { CompareToggle } from "@/components/site/compare-toggle";
 import { Stars } from "@/components/site/stars";
 import { REGION_LABEL, TRIP_TYPE_LABEL } from "@/lib/data";
 import { MONTHS_SHORT, SEASON_BAND_LABEL, seasonBand } from "@/lib/pricing";
-import { displayPriceINR } from "@/lib/filters";
-import { useCurrency } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
 const BAND_TONE: Record<string, string> = {
@@ -21,12 +19,11 @@ const BAND_TONE: Record<string, string> = {
 };
 
 export function PackageCard({ pkg, month }: { pkg: Package; month: number }) {
-  const { format } = useCurrency();
-  const price = displayPriceINR(pkg, month);
   const band = month >= 0 ? seasonBand(pkg.seasonality[month]) : null;
+  const available = month < 0 || pkg.seasonality[month] > 0;
 
   return (
-    <article className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/70 hover:shadow-[0_24px_50px_-32px_rgba(0,0,0,0.5)]">
+    <article className="group h-full flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/70 hover:shadow-[0_24px_50px_-32px_rgba(0,0,0,0.5)]">
       <PhotoFrame className="aspect-[4/3]">
         <Link href={`/packages/${pkg.slug}`} aria-label={pkg.name} className="block h-full">
           <Photo
@@ -82,16 +79,13 @@ export function PackageCard({ pkg, month }: { pkg: Package; month: number }) {
           ))}
         </div>
 
-        <div className="mt-5 flex items-end justify-between gap-3 pt-1">
+        <div className="mt-5 flex items-end justify-between gap-3 border-t border-border pt-4">
           <div>
             <span className="block text-[10px] tracking-[0.16em] text-muted-foreground uppercase">
-              {month >= 0 ? `${MONTHS_SHORT[month]} · per traveller` : "From, per traveller"}
+              Pricing
             </span>
-            <span className="tabular display mt-0.5 block text-2xl">
-              {price === null ? "—" : format(price)}
-            </span>
-            <span className="text-[11px] text-muted-foreground">
-              {price === null ? "Not operating this month" : "All-in, incl. taxes & permits"}
+            <span className="display mt-0.5 block text-lg">
+              {available ? "On request" : "Not operating this month"}
             </span>
           </div>
           <CompareToggle slug={pkg.slug} />
@@ -101,7 +95,7 @@ export function PackageCard({ pkg, month }: { pkg: Package; month: number }) {
           href={`/packages/${pkg.slug}`}
           className="mt-4 inline-flex items-center gap-1.5 text-[13px] font-medium text-foreground underline-offset-4 hover:text-gold hover:underline"
         >
-          Itinerary, map &amp; price breakdown
+          Itinerary, map &amp; inclusions
           <ArrowUpRight className="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </Link>
       </div>

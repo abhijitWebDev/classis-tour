@@ -7,7 +7,7 @@ import { Photo } from "@/components/site/photo";
 import { Stars } from "@/components/site/stars";
 import { SaveButton } from "@/components/site/save-button";
 import { CompareToggle } from "@/components/site/compare-toggle";
-import { PriceCalculator } from "@/components/package/price-calculator";
+import { EnquirePanel } from "@/components/package/enquire-panel";
 import { ItineraryTimeline } from "@/components/package/itinerary";
 import { RouteMap } from "@/components/package/route-map";
 import { Gallery } from "@/components/package/gallery";
@@ -222,7 +222,7 @@ export default async function PackagePage({
           {/* ------------------------------------------------------------ aside */}
           <aside className="lg:pt-14">
             <div className="lg:sticky lg:top-32">
-              <PriceCalculator pkg={pkg} />
+              <EnquirePanel pkg={pkg} />
             </div>
           </aside>
         </div>

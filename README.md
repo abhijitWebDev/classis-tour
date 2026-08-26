@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Classis Tour
 
-## Getting Started
+A luxury travel site built as a **tool**, not a brochure: browse → filter → compare → price → book.
 
-First, run the development server:
+Next.js 16 (App Router, Turbopack) · React 19 · TypeScript · Tailwind v4 · shadcn/ui (Radix).
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run dev     # http://localhost:3000
+npm run build
+npm run lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Screens
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Route | What it does |
+| --- | --- |
+| `/` | Editorial home in five visually distinct chapters (see below) |
+| `/packages` | Search + filter: region, trip type, duration, departure month, budget, sort |
+| `/packages/[slug]` | Day-by-day itinerary, route map, inclusions/exclusions, gallery, reviews, **live price calculator** |
+| `/book/[slug]` | Four-step booking: dates & travellers → rooms & add-ons → lead traveller → deposit → confirmation |
+| `/compare` | Up to three journeys side by side, all quoted for the *same* party and month |
+| `/saved` | Wishlist, persisted per-device |
+| `/reviews` | Reviews filterable by region, trip type, journey, rating, photos-only |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## The three deliberate design registers
 
-## Learn More
+The brief's main failure mode was "the same card grid three times". Each homepage chapter uses a
+genuinely different layout:
 
-To learn more about Next.js, take a look at the following resources:
+1. **Destinations** — an editorial *index*: a large sticky plate on the left that swaps as you move
+   down a numbered list on the right. No cards.
+2. **How we travel** — a dark, text-forward horizontal reading rail with small circular thumbnails.
+3. **Signature journeys** — full-bleed alternating spec rows: photo one third, data-dense panel two
+   thirds, with season multipliers, rating, price and compare/save controls.
+4. **Reviews** — an editorial spread: one long pull-quote against three short ones.
+5. **The numbers** — a three-up explainer of how pricing works.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Editorial sections use the serif display face (Fraunces); every functional control — filters, steppers,
+price breakdowns, forms — uses Inter with tabular figures, so the tool never fights the storytelling.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Pricing is real
 
-## Deploy on Vercel
+There is no flat "starting from" anywhere. `src/lib/pricing.ts` computes:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Twelve monthly multipliers per journey**, blended across months when a trip straddles a boundary
+  (28 Nov → 5 Dec is priced across both, weighted by nights).
+- **Closed seasons** — Ladakh and the Amalfi coast simply don't operate in some months; those dates are
+  disabled in the picker, excluded from filters, and surfaced with the next bookable departure.
+- Child rate (65%), room/villa multipliers, single-traveller supplement, tiered group savings
+  (4/6/8+ travellers), per-traveller vs per-booking add-ons, a non-discountable flights & permits
+  component, and GST.
+- A line-by-line breakdown, and "₹X below the same trip in peak season".
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Currency is INR-based with a USD toggle; every figure, including the prose inside breakdown lines,
+formats through the active currency.
+
+## Data & state
+
+- `src/lib/packages.ts` — nine fully written journeys (itineraries, routes, rooms, add-ons, seasonality).
+- `src/lib/data.ts` — regions, trip types, destination index, experiences, reviews.
+- `src/lib/store.tsx` — currency, wishlist and comparison tray, persisted to `localStorage` through
+  `useSyncExternalStore` so the server snapshot and first client paint always agree.
+- `src/lib/filters.ts` / `src/lib/booking.ts` — URL-serialisable filter and booking state, so a search
+  or a priced booking is a shareable link.
+
+## Notes
+
+- The route map is a hand-drawn SVG schematic rather than a tiled basemap: no key, no third-party
+  tracker, works offline, and it answers the question a traveller actually has (order and overnights).
+- Photography is loaded from Unsplash's CDN with a seeded fallback per frame, so no image slot can
+  render broken.
+- The checkout is a working flow with validation and a real confirmation, but takes no payment — the
+  deposit step says so on screen.

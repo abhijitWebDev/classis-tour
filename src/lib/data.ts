@@ -1,0 +1,310 @@
+import type { Region, Review, TripType } from "@/lib/types";
+import { PACKAGES } from "@/lib/packages";
+import { photo } from "@/lib/images";
+
+export { PACKAGES };
+
+export const REGIONS: Region[] = [
+  { id: "himalaya", label: "The Himalaya", blurb: "Ladakh and Bhutan — thin air, long light, older gods." },
+  { id: "indian-ocean", label: "Indian Ocean", blurb: "Atolls, backwaters and the coast between them." },
+  { id: "southeast-asia", label: "Southeast Asia", blurb: "Volcanic islands and the water that separates them." },
+  { id: "arabia", label: "Arabia", blurb: "Wadis, dune seas and mountain terraces at 2,000m." },
+  { id: "east-africa", label: "East Africa", blurb: "Conservancies and the ecosystems the herds move through." },
+  { id: "mediterranean", label: "Mediterranean", blurb: "Greek temples, Italian coast, and the parts nobody queues for." },
+  { id: "south-america", label: "South America", blurb: "The Andes, and the trails the Inca cut through them." },
+];
+
+export const TRIP_TYPES: TripType[] = [
+  { id: "honeymoon", label: "Honeymoon", blurb: "Privacy engineered in, not promised in a brochure." },
+  { id: "family", label: "Family", blurb: "Paced for children who are not yet good at long car journeys." },
+  { id: "adventure", label: "Adventure", blurb: "On foot, on water, above 4,000m — with the right guide." },
+  { id: "corporate", label: "Corporate", blurb: "Offsites where the setting does some of the work." },
+  { id: "wellness", label: "Wellness", blurb: "Slow, medical where it should be, unhurried everywhere else." },
+  { id: "culture", label: "Culture", blurb: "Access to rooms and rituals that are not on the public timetable." },
+];
+
+/** Chapter two of the homepage — an editorial index, not a card grid. */
+export const DESTINATIONS = [
+  {
+    slug: "ladakh",
+    name: "Ladakh",
+    country: "India",
+    region: "himalaya" as const,
+    latitude: "34°09′ N",
+    note: "Three valleys, two passes above 5,000m, and the clearest night sky in inhabited India.",
+    image: photo("1506905925346-21bda4d32df4", 1600),
+    packageSlug: "ladakh-high-passes",
+  },
+  {
+    slug: "bhutan",
+    name: "Bhutan",
+    country: "Bhutan",
+    region: "himalaya" as const,
+    latitude: "27°28′ N",
+    note: "A country that measures itself in forest cover and cranes returning.",
+    image: photo("1470071459604-3b5ec3a7fe05", 1600),
+    packageSlug: "bhutan-thunder-dragon",
+  },
+  {
+    slug: "maldives",
+    name: "Maldives",
+    country: "Maldives",
+    region: "indian-ocean" as const,
+    latitude: "05°12′ N",
+    note: "Twenty-six atolls. We use two of them, and a seaplane between.",
+    image: photo("1507525428034-b723cf961d3e", 1600),
+    packageSlug: "maldives-atoll-solitude",
+  },
+  {
+    slug: "kerala",
+    name: "Kerala",
+    country: "India",
+    region: "indian-ocean" as const,
+    latitude: "09°58′ N",
+    note: "Sea level to 1,200m and back down again in six days.",
+    image: photo("1602216056096-3b40cc0c9944", 1600),
+    packageSlug: "kerala-backwaters-cardamom",
+  },
+  {
+    slug: "bali",
+    name: "Bali",
+    country: "Indonesia",
+    region: "southeast-asia" as const,
+    latitude: "08°24′ S",
+    note: "The valley east of Ubud, the caldera above it, the cliffs offshore.",
+    image: photo("1537996194471-e657df975ab4", 1600),
+    packageSlug: "bali-island-chapters",
+  },
+  {
+    slug: "oman",
+    name: "Oman",
+    country: "Oman",
+    region: "arabia" as const,
+    latitude: "23°36′ N",
+    note: "Fjords, a 2,000m mountain plateau, and a dune sea with families still in it.",
+    image: photo("1547471080-7cc2caa01a7e", 1600),
+    packageSlug: "oman-sands-and-wadis",
+  },
+  {
+    slug: "kenya",
+    name: "Kenya",
+    country: "Kenya",
+    region: "east-africa" as const,
+    latitude: "01°17′ S",
+    note: "Private conservancy first, national reserve second. Never the other way round.",
+    image: photo("1516426122078-c23e76319801", 1600),
+    packageSlug: "kenya-mara-migration",
+  },
+  {
+    slug: "campania",
+    name: "Campania",
+    country: "Italy",
+    region: "mediterranean" as const,
+    latitude: "40°38′ N",
+    note: "The Amalfi coast, and then the Cilento, where the swimming is better.",
+    image: photo("1533105079780-92b9be482077", 1600),
+    packageSlug: "amalfi-cilento-coast",
+  },
+  {
+    slug: "peru",
+    name: "Peru",
+    country: "Peru",
+    region: "south-america" as const,
+    latitude: "13°31′ S",
+    note: "Acclimatise low, climb late, walk in through the Sun Gate.",
+    image: photo("1587595431973-160d0d94add1", 1600),
+    packageSlug: "peru-sacred-valley",
+  },
+];
+
+/** Chapter three — a horizontal reading rail, deliberately text-forward. */
+export const EXPERIENCES = [
+  {
+    id: "access",
+    index: "01",
+    title: "Rooms that are not on the public timetable",
+    body: "Thiksey's prayer hall an hour before opening. The Kathakali make-up room. Villa Cimbrone's terrace with nobody on it. Access is negotiated one relationship at a time, and it is most of what you are paying for.",
+    thumb: photo("1439066615861-d1af74d74000", 600, 600),
+    tag: "Access",
+  },
+  {
+    id: "guides",
+    index: "02",
+    title: "The specialist, not the escort",
+    body: "A Buddhist scholar in Ladakh. An agronomist at Moray. A marine biologist before every swim in Baa. We hire for the subject, then teach them hospitality — never the reverse.",
+    thumb: photo("1521295121783-8a321d551ad2", 600, 600),
+    tag: "Guiding",
+  },
+  {
+    id: "pacing",
+    index: "03",
+    title: "Deliberately empty afternoons",
+    body: "Every itinerary here has hours in it that we have refused to fill. Two nights doing nothing in Leh. A whole day on Penida with no plan. It is the difference between a holiday and a schedule.",
+    thumb: photo("1499591934245-40b55745b905", 600, 600),
+    tag: "Pacing",
+  },
+  {
+    id: "seasons",
+    index: "04",
+    title: "Built around the moon, the herd, and the rain",
+    body: "Hanifaru's mantas follow lunar tides. The Mara crossings follow the grass. Phobjikha's cranes arrive in late October. We move your dates to the event rather than selling you the month you asked for.",
+    thumb: photo("1534177616072-ef7dc120449d", 600, 600),
+    tag: "Timing",
+  },
+  {
+    id: "ground",
+    index: "05",
+    title: "One vehicle, one household, one boat",
+    body: "Never a shared seat on a shared coach. A private gozzo instead of the Capri ferry. A kettuvallam that anchors alone. Privacy is a logistics problem, and we solve it upstream.",
+    thumb: photo("1502920917128-1aa500764cbd", 600, 600),
+    tag: "Ground",
+  },
+];
+
+export const REVIEWS: Review[] = [
+  {
+    id: "r1",
+    author: "Meera Raghavan",
+    initials: "MR",
+    packageSlug: "ladakh-high-passes",
+    region: "himalaya",
+    tripType: "adventure",
+    rating: 5,
+    travelledOn: "August 2025",
+    title: "The two idle days at the start are the whole trip",
+    body: "I resented paying for two nights of doing nothing in Leh. By day four, when half the people we met at Khardung La were being driven back down with altitude sickness, I understood exactly what I had bought. The Turtuk lunch was the best meal of my year.",
+    photos: [photo("1506905925346-21bda4d32df4", 800, 600), photo("1476514525535-07fb3b4ae5f1", 800, 600)],
+  },
+  {
+    id: "r2",
+    author: "Daniel & Priya Okonjo",
+    initials: "DO",
+    packageSlug: "maldives-atoll-solitude",
+    region: "indian-ocean",
+    tripType: "honeymoon",
+    rating: 5,
+    travelledOn: "December 2025",
+    title: "Two atolls was the right call",
+    body: "We nearly booked five nights on one island. Splitting it meant the trip had a middle. The sandbank afternoon on Noonu — a hamper, an umbrella and a radio — is the single thing we both talk about.",
+    photos: [photo("1519046904884-53103b34b206", 800, 600)],
+  },
+  {
+    id: "r3",
+    author: "The Bhandari family",
+    initials: "SB",
+    packageSlug: "kerala-backwaters-cardamom",
+    region: "indian-ocean",
+    tripType: "family",
+    rating: 5,
+    travelledOn: "January 2026",
+    title: "A houseboat that actually went somewhere",
+    body: "We had done Kerala before and spent the night moored between forty identical boats. This one cruised until dusk and then anchored in a channel on its own. Our nine-year-old had a naturalist to himself for two days and has not stopped talking about kingfishers.",
+    photos: [photo("1593693411515-c20261bcad6e", 800, 600), photo("1580889240912-c39ecefd3d95", 800, 600)],
+  },
+  {
+    id: "r4",
+    author: "Anjali Sethi",
+    initials: "AS",
+    packageSlug: "kenya-mara-migration",
+    region: "east-africa",
+    tripType: "adventure",
+    rating: 5,
+    travelledOn: "August 2025",
+    title: "They told us the odds honestly, and then we got the crossing",
+    body: "What I appreciated most was being told before booking that a river crossing was maybe a 60% proposition for our dates. No overselling. We held at the crossing point for six hours on day five and it happened at 4pm. Laikipia first was also completely right — walking beats driving.",
+    photos: [photo("1516426122078-c23e76319801", 800, 600), photo("1549366021-9f761d450615", 800, 600)],
+  },
+  {
+    id: "r5",
+    author: "Rohan Mehta",
+    initials: "RM",
+    packageSlug: "oman-sands-and-wadis",
+    region: "arabia",
+    tripType: "corporate",
+    rating: 4,
+    travelledOn: "November 2025",
+    title: "Took eleven of my leadership team; it worked",
+    body: "The wadi day did more for the group than three previous offsites combined. Two notes: the Nizwa inn is the weakest link in an otherwise excellent chain of properties, and brief your team properly about alcohol outside Muscat.",
+    photos: [photo("1547471080-7cc2caa01a7e", 800, 600)],
+  },
+  {
+    id: "r6",
+    author: "Isabel Cortez",
+    initials: "IC",
+    packageSlug: "peru-sacred-valley",
+    region: "south-america",
+    tripType: "culture",
+    rating: 5,
+    travelledOn: "June 2025",
+    title: "Valley before Cusco — do not let anyone talk you out of it",
+    body: "Everyone else on our KM104 trail day had come straight from three nights in Cusco and two of them turned back. We had slept at 2,800m for three nights and walked it comfortably. Inti Punku at sunrise is worth every step of the climb.",
+    photos: [photo("1587595431973-160d0d94add1", 800, 600), photo("1526392060635-9d6019884377", 800, 600)],
+  },
+  {
+    id: "r7",
+    author: "Tara Vaz",
+    initials: "TV",
+    packageSlug: "amalfi-cilento-coast",
+    region: "mediterranean",
+    tripType: "honeymoon",
+    rating: 5,
+    travelledOn: "September 2025",
+    title: "The Cilento half is the secret",
+    body: "Ravello and the gozzo day were gorgeous and exactly what we expected. The surprise was the four nights south — Paestum at 8am with an archaeologist, and a beach at Palinuro with maybe nine people on it in September.",
+    photos: [photo("1533105079780-92b9be482077", 800, 600)],
+  },
+  {
+    id: "r8",
+    author: "Karan Shah",
+    initials: "KS",
+    packageSlug: "bali-island-chapters",
+    region: "southeast-asia",
+    tripType: "family",
+    rating: 4,
+    travelledOn: "July 2025",
+    title: "Sidemen over Ubud, every time",
+    body: "Being talked out of Ubud was the best advice we got. Sidemen is quiet and the subak walk was genuinely interesting rather than a photo stop. Manta Point at 6:30am is non-negotiable — by 9 there were fourteen boats.",
+    photos: [photo("1537996194471-e657df975ab4", 800, 600), photo("1518548419970-58e3b4079ab2", 800, 600)],
+  },
+  {
+    id: "r9",
+    author: "Naomi Fischer",
+    initials: "NF",
+    packageSlug: "bhutan-thunder-dragon",
+    region: "himalaya",
+    tripType: "wellness",
+    rating: 5,
+    travelledOn: "November 2025",
+    title: "Three nights in Phobjikha, and the cranes arrived on day two",
+    body: "Most Bhutan itineraries would have given us one night here. Three meant we saw the valley in fog, in sun, and with about sixty black-necked cranes on the floor of it. Taktsang at 6am was empty on the way up and heaving on the way down.",
+    photos: [photo("1501785888041-af3ef285b470", 800, 600)],
+  },
+  {
+    id: "r10",
+    author: "Vikram Iyer",
+    initials: "VI",
+    packageSlug: "ladakh-high-passes",
+    region: "himalaya",
+    tripType: "culture",
+    rating: 5,
+    travelledOn: "September 2025",
+    title: "The scholar made it a different trip",
+    body: "Having someone who could actually read the thangkas and explain what was happening in the Thiksey assembly turned a sightseeing day into something else. Pangong with an astronomer at night was the other standout.",
+    photos: [photo("1439066615861-d1af74d74000", 800, 600)],
+  },
+];
+
+export const REGION_LABEL: Record<string, string> = Object.fromEntries(
+  REGIONS.map((r) => [r.id, r.label])
+);
+export const TRIP_TYPE_LABEL: Record<string, string> = Object.fromEntries(
+  TRIP_TYPES.map((t) => [t.id, t.label])
+);
+
+export function getPackage(slug: string) {
+  return PACKAGES.find((p) => p.slug === slug);
+}
+
+export function reviewsForPackage(slug: string) {
+  return REVIEWS.filter((r) => r.packageSlug === slug);
+}

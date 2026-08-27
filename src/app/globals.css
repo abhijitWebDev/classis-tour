@@ -318,6 +318,65 @@
 }
 
 /* -------------------------------------------------------------------------- */
+/*  Rail progress                                                              */
+/* -------------------------------------------------------------------------- */
+
+/*
+ * The rail's position indicator is driven straight off the list's own scroll
+ * position by a named scroll timeline, so there is no listener, no state and no
+ * per-frame React work behind it. `timeline-scope` on the wrapper is what lets
+ * the meter reference a timeline declared on its sibling.
+ *
+ * Hidden entirely where scroll timelines are unsupported: an indicator that
+ * cannot indicate is worse than no indicator, and the arrows plus the count
+ * line already say everything it says.
+ */
+.rail {
+  timeline-scope: --rail;
+}
+
+.rail-scroller {
+  scroll-timeline: --rail inline;
+}
+
+.rail-meter {
+  display: none;
+}
+
+@keyframes rail-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/*
+ * Origin and rest state belong here, not on the element as `origin-left
+ * scale-x-0`. Tailwind v4 compiles scale utilities to the standalone `scale`
+ * property, which composes with `transform` rather than being overridden by it:
+ * the keyframe below animated transform correctly while `scale: 0 1` held the
+ * bar at zero width the whole time. Anything animating transform must not carry
+ * a Tailwind scale utility as well.
+ */
+.rail-progress {
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+
+@supports (animation-timeline: scroll()) {
+  .rail-meter {
+    display: block;
+  }
+
+  .rail-progress {
+    animation: rail-fill linear both;
+    animation-timeline: --rail;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
 /*  Scroll-linked parallax                                                     */
 /* -------------------------------------------------------------------------- */
 
@@ -491,7 +550,8 @@
     transform: none;
     transition: none;
   }
-  html {
+  html,
+  .rail-scroller {
     scroll-behavior: auto;
   }
 }

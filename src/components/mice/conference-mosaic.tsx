@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Photo, PhotoFrame } from "@/components/site/photo";
 import { PointerGlow } from "@/components/site/pointer-glow";
+import { Rail } from "@/components/site/rail";
 import { Reveal } from "@/components/site/reveal";
 import { Section, SectionHeader } from "@/components/site/section";
 import { CONFERENCE_DESTINATIONS } from "@/lib/mice";
@@ -27,13 +28,14 @@ export function ConferenceMosaic() {
 
       <Reveal from="right">
         {/*
-          Negative inline margins cancel the container's own padding, then the
-          same value is added back as scroll padding. The rail therefore runs to
-          the container's edge — off the side of the screen on anything under
-          1400px — while the first plate still starts on the headline's margin.
-          Matching those two numbers is the whole trick; don't change one alone.
+          <Rail> owns the scroller and the controls. The negative inline margins
+          live on it: they cancel the container's own padding and add the same
+          value back as scroll padding, so the rail runs to the container's edge
+          — off the side of the screen on anything under 1400px — while the
+          first plate still starts on the headline's margin. Matching those two
+          numbers is the whole trick; don't change one alone.
         */}
-        <ul className="no-scrollbar -mx-5 mt-10 flex snap-x gap-3 overflow-x-auto scroll-smooth px-5 pb-2 lg:-mx-10 lg:gap-4 lg:px-10">
+        <Rail label="conference cities" caption={`${CONFERENCE_DESTINATIONS.length} cities`}>
           {CONFERENCE_DESTINATIONS.map((d, i) => (
             <li
               key={d.slug}
@@ -95,12 +97,8 @@ export function ConferenceMosaic() {
               </Link>
             </li>
           ))}
-        </ul>
+        </Rail>
       </Reveal>
-
-      <p className="mt-5 text-[12px] tracking-[0.14em] text-muted-foreground uppercase">
-        {CONFERENCE_DESTINATIONS.length} cities · scroll for the rest
-      </p>
     </Section>
   );
 }

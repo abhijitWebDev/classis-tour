@@ -107,10 +107,10 @@ export function SiteHeader() {
 
           <Button
             asChild
-            className={cn(
-              "hidden h-9 rounded-full px-4 text-[13px] sm:inline-flex",
-              transparent && "bg-white text-ink hover:bg-white/85"
-            )}
+            // Gold in both header states rather than white-over-hero and dark
+            // once scrolled: one accent, used the same way everywhere, is what
+            // makes it read as the brand's colour instead of a button style.
+            className="hidden h-9 rounded-full bg-gold px-4 text-[13px] text-ink hover:bg-gold/90 sm:inline-flex"
           >
             <Link href="/mice#brief">Send a brief</Link>
           </Button>

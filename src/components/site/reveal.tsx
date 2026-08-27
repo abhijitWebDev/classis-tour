@@ -14,12 +14,19 @@ import { cn } from "@/lib/utils";
 export function Reveal({
   children,
   delay = 0,
+  from = "up",
   className,
   as: Tag = "div",
 }: {
   children: React.ReactNode;
   /** Milliseconds, for staggering siblings. Keep under ~250 or it reads as lag. */
   delay?: number;
+  /**
+   * Which way the band travels in from. Pick the one the band's own shape
+   * argues for rather than alternating for variety's sake: a rail that runs off
+   * the right edge enters from the right, a pull-quote settles in with scale.
+   */
+  from?: "up" | "left" | "right" | "scale";
   className?: string;
   as?: React.ElementType;
 }) {
@@ -56,6 +63,7 @@ export function Reveal({
     <Tag
       ref={ref}
       data-reveal={shown ? "shown" : "hidden"}
+      data-reveal-from={from === "up" ? undefined : from}
       style={delay ? { transitionDelay: `${delay}ms` } : undefined}
       className={cn(className)}
     >

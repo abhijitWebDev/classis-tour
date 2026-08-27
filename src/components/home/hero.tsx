@@ -58,15 +58,24 @@ export function Hero() {
         className="absolute inset-0 h-full w-full scale-110 object-cover blur-2xl"
       />
 
-      <Photo
-        src={HERO_SRC}
-        fallbackSeed="classis-mice-hero"
-        loading="eager"
-        fetchPriority="high"
-        drift
-        className="absolute inset-0"
-        alt="A resort terrace at sunset — pool, loungers and palms under a gold sky"
-      />
+      {/*
+        The parallax rides on this wrapper, not on the frame itself: the photo
+        is already running its ken-burns drift, and two animations competing for
+        one transform means whichever is declared last silently wins. Split
+        across parent and child they compose instead. It also means a browser
+        without scroll timelines still gets the drift.
+      */}
+      <div className="parallax-hero absolute inset-0">
+        <Photo
+          src={HERO_SRC}
+          fallbackSeed="classis-mice-hero"
+          loading="eager"
+          fetchPriority="high"
+          drift
+          className="absolute inset-0"
+          alt="A resort terrace at sunset — pool, loungers and palms under a gold sky"
+        />
+      </div>
 
       {/*
         Hero photography must carry no legible third-party event branding — on a
@@ -147,7 +156,7 @@ export function Hero() {
         >
           <Button
             asChild
-            className="h-12 gap-2 rounded-full bg-white px-7 text-[14px] text-ink transition-transform hover:translate-y-[-1px] hover:bg-white"
+            className="h-12 gap-2 rounded-full bg-gold px-7 text-[14px] text-ink transition-transform hover:translate-y-[-1px] hover:bg-gold/90"
           >
             <Link href="/mice#brief">
               Send us a brief

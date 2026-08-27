@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Photo, PhotoFrame } from "@/components/site/photo";
+import { PointerGlow } from "@/components/site/pointer-glow";
 import { Reveal } from "@/components/site/reveal";
 import { Section, SectionHeader } from "@/components/site/section";
 import { CONFERENCE_DESTINATIONS } from "@/lib/mice";
@@ -24,7 +25,7 @@ export function ConferenceMosaic() {
         linkLabel="Talk to the events desk"
       />
 
-      <Reveal>
+      <Reveal from="right">
         {/*
           Negative inline margins cancel the container's own padding, then the
           same value is added back as scroll padding. The rail therefore runs to
@@ -52,10 +53,31 @@ export function ConferenceMosaic() {
                   />
                 </PhotoFrame>
 
-                <div className="scrim-bottom absolute inset-0 transition-opacity duration-500" />
+                {/* Under the type, over the picture: warmth on the photograph,
+                    not a wash across the words. */}
+                <PointerGlow />
 
-                <div className="absolute inset-x-0 bottom-0 p-5">
-                  <p className="text-[10px] font-medium tracking-[0.22em] text-gold uppercase">
+                {/*
+                  The scrim rides on this block rather than on the plate. Across
+                  a rail of twelve a full-height scrim turned a row of
+                  photographs into a row of dark rectangles, and a fixed short
+                  one loses the country label the moment the note opens and
+                  lifts it clear. Sized by the block, it does both jobs.
+
+                  pt-16 is structural, not spacing: it is the ramp the gradient
+                  needs above the first line. Trim it and the label sits on the
+                  transparent end of the gradient.
+                */}
+                <div className="scrim-plate absolute inset-x-0 bottom-0 px-5 pt-16 pb-5">
+                  {/*
+                    gold-soft, not gold. At 10px over a scrim that is only
+                    partly opaque, the label's contrast is set by whatever
+                    photograph is underneath: across the twelve plates the mid
+                    gold ran from 5.8:1 down to 3.5:1 on the brightest frame.
+                    The lighter token clears AA on all of them without darkening
+                    the picture to get there.
+                  */}
+                  <p className="text-[10px] font-medium tracking-[0.22em] text-gold-soft uppercase">
                     {d.country}
                   </p>
                   <h3 className="display mt-1.5 text-[26px] leading-none text-white lg:text-[30px]">

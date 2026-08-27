@@ -38,7 +38,7 @@ export function ReviewPreview() {
 
   return (
     <Section tone="raised">
-      <Reveal className="max-w-4xl">
+      <Reveal from="scale" className="max-w-4xl">
         <span className="flex items-center gap-3 text-[11px] font-medium tracking-[0.24em] text-muted-foreground uppercase">
           <span className="h-px w-7 bg-gold" />
           Reviews

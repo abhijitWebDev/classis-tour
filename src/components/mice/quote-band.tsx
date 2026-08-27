@@ -18,17 +18,22 @@ export function QuoteBand() {
         weighted scrim it is the last picture on the page, which is what a
         closing CTA on a travel site should be.
       */}
-      <Photo
-        src={photo("1526041092449-209d556f7a32", 2000)}
-        fallbackSeed="classis-quote-band"
-        alt=""
-        drift
-        className="absolute inset-0"
-      />
+      <div className="parallax-band absolute inset-0">
+        <Photo
+          src={photo("1526041092449-209d556f7a32", 2000)}
+          fallbackSeed="classis-quote-band"
+          alt=""
+          drift
+          className="absolute inset-0"
+        />
+      </div>
       <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/80 via-45% to-ink/25" />
       <div className="absolute inset-0 bg-gradient-to-t from-ink/70 to-transparent" />
 
-      <Reveal className="relative mx-auto w-full max-w-[1400px] px-5 py-24 lg:px-10 lg:py-28">
+      <Reveal
+        from="left"
+        className="relative mx-auto w-full max-w-[1400px] px-5 py-24 lg:px-10 lg:py-28"
+      >
         <span className="text-[11px] font-medium tracking-[0.24em] text-white/45 uppercase">
           Pricing
         </span>

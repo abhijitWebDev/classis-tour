@@ -186,15 +186,17 @@ export function CardGrid({
   className,
   children,
   stagger = 70,
+  from = "up",
 }: {
   className?: string;
   children: React.ReactNode;
   stagger?: number;
+  from?: "up" | "left" | "right" | "scale";
 }) {
   return (
     <div className={cn("mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4", className)}>
       {React.Children.map(children, (child, i) => (
-        <Reveal className="h-full" delay={Math.min(i, 4) * stagger}>
+        <Reveal className="h-full" delay={Math.min(i, 4) * stagger} from={from}>
           {child}
         </Reveal>
       ))}

@@ -183,6 +183,40 @@
       transparent 100%
     );
   }
+  /*
+   * The rail plate's scrim. Unlike .scrim-bottom this is sized by the text
+   * block it sits on rather than by the picture, which is the only way it can
+   * stay under type that moves.
+   *
+   * A tile-anchored scrim covers a fixed band of the photograph. That is fine
+   * until the plate's note opens on hover and pushes the country label 100px
+   * upward, out of the covered band and onto bare sky: measured 1.32:1 against
+   * a 4.5 requirement. Putting the gradient on the block means it grows with
+   * the block, and the padding-top there keeps the ramp above the first line
+   * in both states.
+   *
+   * Stops are percentages so they hold at either height, and the ramp is kept
+   * deliberately flat from 30% to 70% — the band the label crosses as the note
+   * opens. The label sits at 52% of the block at rest and about 63% open, so a
+   * steep ramp there would swing its cover with the hover state; across this
+   * plateau it moves roughly 0.77 to 0.74 and the contrast holds.
+   *
+   * Measured against the real composite on all twelve plates: label 6.8:1 to
+   * 11.7:1 (needs 4.5), city name 10.9:1 to 15.5:1 (needs 3). The margin on
+   * the worst frame is what covers the hover shift. Everything above the block
+   * is left completely clear, which is what stopped the rail reading as twelve
+   * dark rectangles.
+   */
+  .scrim-plate {
+    background: linear-gradient(
+      to top,
+      oklch(0.13 0.01 60 / 0.9) 0%,
+      oklch(0.13 0.01 60 / 0.84) 30%,
+      oklch(0.13 0.01 60 / 0.72) 70%,
+      oklch(0.13 0.01 60 / 0.24) 88%,
+      transparent 100%
+    );
+  }
   .scrim-bottom {
     background: linear-gradient(
       to top,
@@ -256,9 +290,100 @@
     transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/*
+ * Direction variants. One shared travel distance in one direction meant every
+ * band arrived the same way, which reads as a page sliding rather than a page
+ * being composed. A band picks the direction its own shape argues for: the
+ * destinations rail runs off the right edge, so it enters from the right.
+ *
+ * These are scoped to the hidden state deliberately. Keeping them off
+ * [data-reveal="shown"] means the resting rule stays a single low-specificity
+ * selector and nothing has to out-specify it to land.
+ */
+[data-reveal="hidden"][data-reveal-from="left"] {
+  transform: translate3d(-30px, 0, 0);
+}
+
+[data-reveal="hidden"][data-reveal-from="right"] {
+  transform: translate3d(30px, 0, 0);
+}
+
+[data-reveal="hidden"][data-reveal-from="scale"] {
+  transform: scale(0.945);
+}
+
 [data-reveal="shown"] {
   opacity: 1;
   transform: none;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Scroll-linked parallax                                                     */
+/* -------------------------------------------------------------------------- */
+
+/*
+ * The reference site does this with a scroll listener that writes a transform
+ * on every scroll event. A scroll-driven animation expresses the same movement
+ * declaratively and runs off the main thread, so it cannot jank the way a
+ * listener does once a band gets busy.
+ *
+ * Both keyframes carry their own scale because the frame has to be larger than
+ * its box before it may be moved inside it. The overhang is always kept wider
+ * than the travel (7% against 6%, 7% against 5%) or the far edge swings into
+ * view at the end of the range.
+ *
+ * Where the timeline is unsupported (Firefox today) the whole block is skipped
+ * and the frame renders static, which is the correct fallback: the hero keeps
+ * its ken-burns drift, and nothing depends on the parallax to be legible.
+ */
+@keyframes hero-parallax {
+  from {
+    transform: translate3d(0, 0, 0) scale(1.14);
+  }
+  to {
+    transform: translate3d(0, 6%, 0) scale(1.14);
+  }
+}
+
+@keyframes band-parallax {
+  from {
+    transform: translate3d(0, -5%, 0) scale(1.14);
+  }
+  to {
+    transform: translate3d(0, 5%, 0) scale(1.14);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* Anchored to the document scroller over the first viewport, so the hero
+       tracks the scroll exactly from rest rather than starting mid-range the
+       way a view() timeline would for an element already on screen at load. */
+    .parallax-hero {
+      animation: hero-parallax linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 100vh;
+    }
+
+    .parallax-band {
+      animation: band-parallax linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+  }
+}
+
+/*
+ * Cursor-tracked warmth on a card. --gx/--gy are written straight to the
+ * element's style by <PointerGlow>; the fallback centres the pool so the card
+ * still looks deliberate on a device that never fires a pointermove.
+ */
+.pointer-glow {
+  background: radial-gradient(
+    220px circle at var(--gx, 50%) var(--gy, 50%),
+    color-mix(in oklab, var(--gold), transparent 76%) 0%,
+    transparent 70%
+  );
 }
 
 /*
@@ -356,9 +481,12 @@
     transition: none;
     transform: scaleX(1);
   }
-  /* Never leave content mid-transition for someone who opted out of motion. */
+  /* Never leave content mid-transition for someone who opted out of motion.
+     The direction variants are two-attribute selectors, so they have to be
+     named here explicitly or they out-specify this reset and stay offset. */
   [data-reveal],
-  [data-reveal="shown"] {
+  [data-reveal="shown"],
+  [data-reveal="hidden"][data-reveal-from] {
     opacity: 1;
     transform: none;
     transition: none;

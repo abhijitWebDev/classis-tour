@@ -45,7 +45,12 @@ export function EventFormats() {
         {EVENT_FORMATS.map((f, i) => {
           const feature = i === 0;
           return (
-            <Reveal key={f.slug} delay={Math.min(i, 4) * 70} className={cn("h-full", SPAN[i])}>
+            <Reveal
+              key={f.slug}
+              delay={Math.min(i, 4) * 70}
+              from="scale"
+              className={cn("h-full", SPAN[i])}
+            >
               <Link
                 href="/mice#brief"
                 className="group relative block h-full overflow-hidden rounded-lg ring-1 ring-transparent transition-shadow duration-500 hover:ring-gold/60 hover:shadow-[0_30px_60px_-38px_rgba(0,0,0,0.85)]"

@@ -31,7 +31,7 @@ export function RouteMap({ pkg }: { pkg: Package }) {
 
   return (
     <div className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
-      <div className="relative overflow-hidden rounded-xl border border-border bg-[color-mix(in_oklch,var(--sand),var(--background)_45%)]">
+      <div className="relative overflow-hidden rounded-xl border border-border bg-[color-mix(in_oklab,var(--sand),var(--background)_45%)]">
         <svg viewBox="0 0 100 100" className="block aspect-[4/3] w-full" role="img" aria-label={`Route map for ${pkg.name}`}>
           <defs>
             <pattern id="ct-grid" width="5" height="5" patternUnits="userSpaceOnUse">

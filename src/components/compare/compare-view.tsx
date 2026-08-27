@@ -216,7 +216,7 @@ export function CompareView() {
             <tr>
               <th
                 colSpan={packages.length + 2}
-                className="border-y border-border bg-[color-mix(in_oklch,var(--background),var(--foreground)_3%)] px-3 py-2.5 text-left"
+                className="border-y border-border bg-[color-mix(in_oklab,var(--background),var(--foreground)_3%)] px-3 py-2.5 text-left"
               >
                 <span className="eyebrow">What is included</span>
               </th>

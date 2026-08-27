@@ -1,38 +1,58 @@
-import { Photo, PhotoFrame } from "@/components/site/photo";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import { Reveal } from "@/components/site/reveal";
 import { Section, SectionHeader } from "@/components/site/section";
 import { CLIENT_TYPES } from "@/lib/mice";
 
-/** Who books us. Four plates, four short lines. */
+/**
+ * Who books us — the page's short dark punctuation.
+ *
+ * This was four photographic plates with captions. The photographs were the
+ * weakest on the site (a stock open-plan office, a hospital reception desk) and
+ * it was the third consecutive band shaped header-then-picture-grid. Set as a
+ * dark measure it runs ~340px against neighbours of 700–1,050px, which is what
+ * gives the page a beat; the client list is a fact, and facts read well as type.
+ *
+ * Keep it short. If this band grows a photograph or a fifth column it stops
+ * being punctuation and the rhythm goes flat again.
+ */
 export function ClientTypes() {
   return (
-    <Section tone="raised">
+    <Section tone="ink" size="compact">
       <SectionHeader
         eyebrow="Who we work with"
         title="Companies and hospitals, mostly"
-        href="/corporate"
-        linkLabel="Corporate desk"
+        tone="dark"
       />
 
-      <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <dl className="mt-10 grid gap-x-8 gap-y-9 sm:grid-cols-2 lg:grid-cols-4">
         {CLIENT_TYPES.map((c, i) => (
-          <Reveal key={c.slug} delay={Math.min(i, 3) * 70}>
-            <article className="group">
-              <PhotoFrame className="aspect-[4/3] rounded-lg ring-1 ring-transparent transition-shadow duration-500 group-hover:ring-gold/60">
-                <Photo
-                  src={c.image}
-                  fallbackSeed={c.slug}
-                  alt={c.label}
-                  className="transition-transform duration-[1600ms] ease-out group-hover:scale-[1.06]"
-                />
-              </PhotoFrame>
-              <h3 className="display mt-5 text-[21px] leading-tight">{c.label}</h3>
-              <span className="rule-draw mt-2.5 block h-px w-10" />
-              <p className="mt-3 text-[13px] leading-relaxed text-muted-foreground">{c.note}</p>
-            </article>
+          <Reveal
+            key={c.slug}
+            delay={Math.min(i, 4) * 70}
+            className="relative lg:border-l lg:border-white/12 lg:pl-6 lg:first:border-l-0 lg:first:pl-0"
+          >
+            <span className="tabular block text-[11px] font-medium tracking-[0.2em] text-gold">
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            <dt className="display mt-3 text-[20px] leading-tight text-white">{c.label}</dt>
+            <dd className="mt-2.5 text-[13px] leading-relaxed text-white/55">{c.note}</dd>
           </Reveal>
         ))}
-      </div>
+      </dl>
+
+      <Reveal delay={140} className="mt-10">
+        <Link
+          href="/corporate"
+          className="group inline-flex flex-col text-sm font-medium text-white/80 transition-colors hover:text-gold"
+        >
+          <span className="inline-flex items-center gap-1.5">
+            Corporate desk
+            <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </span>
+          <span className="rule-draw mt-1 h-px w-full" />
+        </Link>
+      </Reveal>
     </Section>
   );
 }

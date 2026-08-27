@@ -392,7 +392,7 @@ export function BookingFlow({ pkg }: { pkg: Package }) {
                   </span>
                 </span>
               </div>
-              <div className="border-t border-border bg-[color-mix(in_oklch,var(--card),var(--foreground)_3%)] p-4">
+              <div className="border-t border-border bg-[color-mix(in_oklab,var(--card),var(--foreground)_3%)] p-4">
                 <span className="block text-[10px] tracking-[0.16em] text-muted-foreground uppercase">
                   Pricing
                 </span>

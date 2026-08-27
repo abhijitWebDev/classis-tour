@@ -7,7 +7,7 @@ import { COMPANY } from "@/lib/company";
  */
 export function AboutMasthead() {
   return (
-    <section className="border-b border-border bg-[color-mix(in_oklch,var(--background),var(--foreground)_3%)]">
+    <section className="border-b border-border bg-[color-mix(in_oklab,var(--background),var(--foreground)_3%)]">
       <div className="mx-auto max-w-[1400px] px-5 py-16 lg:px-10 lg:py-24">
         <span className="eyebrow">{COMPANY.headquarters}</span>
         <h1 className="display mt-4 max-w-4xl text-[clamp(2.25rem,5.5vw,4rem)] leading-[1.05]">

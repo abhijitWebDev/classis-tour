@@ -29,7 +29,7 @@ export default async function BookPage({
 
   return (
     <div className="pt-16 sm:pt-[72px]">
-      <div className="border-b border-border bg-[color-mix(in_oklch,var(--background),var(--foreground)_3%)]">
+      <div className="border-b border-border bg-[color-mix(in_oklab,var(--background),var(--foreground)_3%)]">
         <div className="mx-auto max-w-[1400px] px-5 py-10 lg:px-10">
           <span className="eyebrow">Booking · {REGION_LABEL[pkg.region]}</span>
           <h1 className="display mt-3 text-[clamp(1.85rem,4vw,2.75rem)]">{pkg.name}</h1>

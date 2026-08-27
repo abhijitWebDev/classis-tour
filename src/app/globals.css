@@ -179,7 +179,7 @@
     background: linear-gradient(
       90deg,
       var(--gold) 0%,
-      color-mix(in oklch, var(--gold), transparent 70%) 60%,
+      color-mix(in oklab, var(--gold), transparent 70%) 60%,
       transparent 100%
     );
   }
@@ -261,6 +261,66 @@
   transform: none;
 }
 
+/*
+ * Ambient hero motion. Particles drift the full height of the frame on their
+ * own clocks; every value (size, lane, duration, delay) is written into the
+ * markup as an inline style so the server and the client agree — randomising
+ * them at runtime would hydrate-mismatch.
+ */
+@keyframes float-up {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(0, -105vh, 0);
+    opacity: 0;
+  }
+}
+
+.animate-float {
+  animation: float-up linear infinite;
+}
+
+@keyframes dot-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(1.9);
+  }
+}
+
+.animate-dot {
+  animation: dot-pulse 2.4s ease-in-out infinite;
+}
+
+/* Expanding ring on the floating contact button. */
+@keyframes ring-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgb(37 211 102 / 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 16px rgb(37 211 102 / 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgb(37 211 102 / 0);
+  }
+}
+
+.animate-ring {
+  animation: ring-pulse 2.8s ease-out infinite;
+}
+
 @keyframes scroll-cue {
   0%,
   100% {
@@ -280,8 +340,16 @@
 @media (prefers-reduced-motion: reduce) {
   .animate-drift,
   .animate-cue,
+  .animate-float,
+  .animate-dot,
+  .animate-ring,
   .rise {
     animation: none;
+  }
+  /* Ambient decoration has no meaning to convey — take it away entirely
+     rather than freezing 22 dots mid-frame across the hero. */
+  .animate-float {
+    display: none;
   }
   .rule-draw,
   .group:hover .rule-draw {

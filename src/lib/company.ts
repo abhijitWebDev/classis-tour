@@ -8,6 +8,12 @@ export const COMPANY = {
   legalName: "Classis Travel and Tours",
   shortName: "Classis",
   headquarters: "Mumbai, India",
+  /**
+   * Digits only, with country code, for wa.me links. PLACEHOLDER — replace with
+   * the business line before launch; it is live on every page via the floating
+   * button, so a wrong number here is a wrong number everywhere.
+   */
+  whatsapp: "919820000000",
   /** The one-line positioning, used in the footer and as page metadata. */
   positioning:
     "A Mumbai-headquartered travel management company delivering corporate travel, MICE, events and bespoke leisure itineraries.",
@@ -72,14 +78,18 @@ export const LEADERSHIP: Leader[] = [
 ];
 
 /**
- * The strip under the hero. Deliberately capability claims, not achievement
- * numbers — a stat bar ("450 events delivered") converts better for B2B, but
- * every figure would be invented, and this is a real company. Swap this for
- * `{ figure, label }` pairs the moment the client supplies real numbers.
+ * The thin line under the measures band. Capability claims, not achievement
+ * numbers — "450 events delivered" converts better for B2B and every figure
+ * would be invented, and this is a real company. The counted figures above it
+ * are all derived from the catalogue for the same reason.
+ *
+ * Kept to four short facts, and only facts the figures above do not already
+ * carry: client sectors and event formats are counted up there, so saying them
+ * again here is words without information.
  */
-export const CAPABILITY_STRIP: { label: string; detail: string }[] = [
-  { label: "Headquartered in Mumbai", detail: "Operating worldwide" },
-  { label: "Corporate, hospital & association clients", detail: "Delegations of 10 to 500+" },
-  { label: "Conferences, seminars, exhibitions, incentives", detail: "Four formats, one team" },
-  { label: "Venue, logistics, production, on-site", detail: "End to end, no handoffs" },
+export const CAPABILITY_STRIP: string[] = [
+  "Mumbai HQ, operating worldwide",
+  "Delegations of 10 to 500+",
+  "Venue, logistics, production, on-site",
+  "End to end, no handoffs",
 ];

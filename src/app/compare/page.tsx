@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function ComparePage() {
   return (
     <div className="pt-16 sm:pt-[72px]">
-      <div className="border-b border-border bg-[color-mix(in_oklch,var(--background),var(--foreground)_3%)]">
+      <div className="border-b border-border bg-[color-mix(in_oklab,var(--background),var(--foreground)_3%)]">
         <div className="mx-auto max-w-[1400px] px-5 py-12 lg:px-10">
           <span className="eyebrow">Side by side</span>
           <h1 className="display mt-3 text-[clamp(2.25rem,5vw,3.5rem)]">Compare journeys</h1>

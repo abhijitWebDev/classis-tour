@@ -5,6 +5,7 @@ import "./globals.css";
 import { CurrencyProvider, TripsProvider } from "@/lib/store";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
+import { WhatsAppButton } from "@/components/site/whatsapp-button";
 import { CompareTray } from "@/components/site/compare-tray";
 
 /** Editorial display face — headlines, destination and city names at large sizes. */
@@ -55,6 +56,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <main className="flex-1">{children}</main>
             <SiteFooter />
             <CompareTray />
+            <WhatsAppButton />
           </TripsProvider>
         </CurrencyProvider>
       </body>

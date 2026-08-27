@@ -15,7 +15,7 @@ export function Inclusions({ pkg }: { pkg: Package }) {
           ))}
         </ul>
       </div>
-      <div className="bg-[color-mix(in_oklch,var(--card),var(--foreground)_3%)] p-6 lg:p-8">
+      <div className="bg-[color-mix(in_oklab,var(--card),var(--foreground)_3%)] p-6 lg:p-8">
         <h3 className="display text-xl">What it does not</h3>
         <ul className="mt-5 space-y-3">
           {pkg.exclusions.map((item) => (

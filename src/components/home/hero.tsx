@@ -3,12 +3,40 @@ import { ArrowRight, ChevronDown } from "lucide-react";
 import { Photo } from "@/components/site/photo";
 import { Button } from "@/components/ui/button";
 import { photo } from "@/lib/images";
-import { CAPABILITY_STRIP } from "@/lib/company";
 
-const HERO_ID = "1511578314322-379afb476865";
+/*
+ * Golden-hour resort: the incentive-travel product, and the warmest frame in
+ * the catalogue. It replaced a conference hall — technically the truest picture
+ * of the business, but a cold, empty, white-walled room, which is a hard first
+ * impression to love. This one still shows a *venue* (loungers, umbrellas, the
+ * pool, the buildings behind) rather than an empty beach, so the page still
+ * reads as "we take your people here" and not as a holiday brochure.
+ *
+ * Freed from the formats mosaic, which now carries the Amalfi frame instead —
+ * no photograph appears twice on this page.
+ */
+const HERO_ID = "1596436889106-be35e843f974";
 const HERO_SRC = photo(HERO_ID, 1920);
 /** 48px wide. Arrives in one packet and is blurred up, so the fold is never flat black. */
 const HERO_LQIP = photo(HERO_ID, 48);
+
+/**
+ * Ambient motes drifting up the frame. Fixed values, not `Math.random()`:
+ * this renders on the server, and random values would differ on the client and
+ * trip a hydration mismatch. Tuples are [left %, size px, duration s, delay s,
+ * opacity]. Lanes are spread unevenly on purpose — an even distribution reads
+ * as a grid of dots rather than as dust in a light beam.
+ */
+const MOTES: [number, number, number, number, number][] = [
+  [4, 2, 19, 0, 0.35], [11, 3, 26, 6, 0.22], [17, 2, 22, 2.5, 0.4],
+  [23, 1, 30, 9, 0.28], [29, 3, 17, 4, 0.3], [36, 2, 24, 12, 0.24],
+  [41, 2, 28, 1.5, 0.36], [47, 1, 21, 7.5, 0.2], [53, 3, 25, 3, 0.32],
+  [58, 2, 18, 10.5, 0.26], [64, 2, 31, 5, 0.22], [69, 3, 23, 13.5, 0.34],
+  [74, 1, 27, 0.8, 0.24], [79, 2, 20, 8, 0.38], [83, 3, 29, 4.5, 0.2],
+  [87, 2, 16, 11, 0.3], [91, 1, 24, 2, 0.26], [94, 2, 22, 14, 0.32],
+  [8, 1, 33, 15.5, 0.18], [31, 2, 15, 16.5, 0.28], [61, 1, 34, 17, 0.2],
+  [76, 2, 19, 18.5, 0.3],
+];
 
 /**
  * Picture first, and the one place on the site that animates on load: the
@@ -37,33 +65,67 @@ export function Hero() {
         fetchPriority="high"
         drift
         className="absolute inset-0"
-        alt="A conference hall set for a plenary, screens up and tables laid"
+        alt="A resort terrace at sunset — pool, loungers and palms under a gold sky"
       />
 
       {/*
-        Scrims are weighted left, where the type sits, and released across the
-        right so the hall stays bright. Hero photography must have no legible
-        third-party event branding in it — on a real company's homepage that
-        reads as a claim about whose event it was.
-      */}
-      <div className="absolute inset-0 scrim-bottom" />
-      {/* The hall floor is pale; the standfirst, buttons and capability strip all
-          sit over it and need their own ground. */}
-      <div className="absolute inset-x-0 bottom-0 h-[46%] bg-gradient-to-t from-black/92 via-black/62 to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/82 via-black/22 via-42% to-transparent" />
-      <div className="pointer-events-none absolute inset-0 [background:radial-gradient(125%_90%_at_62%_38%,transparent_50%,rgba(0,0,0,0.32)_100%)]" />
+        Hero photography must carry no legible third-party event branding — on a
+        real company's homepage that reads as a claim about whose event it was.
 
-      <div className="relative mx-auto flex min-h-[100svh] max-w-[1400px] flex-col justify-end px-5 pt-32 pb-14 lg:px-10 lg:pb-16">
+
+        A centred headline needs a centred ground, so the old left-weighted
+        wash is gone. This is a four-stop vertical scrim that deliberately
+        *releases* through the middle of the frame — the sky and the water are
+        the reason for the picture, and burying them under an even 50% tint to
+        make type easy is how a hero stops being worth looking at.
+      */}
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.58)_0%,rgba(0,0,0,0.34)_24%,rgba(0,0,0,0.30)_48%,rgba(0,0,0,0.55)_78%,rgba(0,0,0,0.74)_100%)]" />
+      {/*
+        A centred column of shade under the copy. Averaged across the frame the
+        type already cleared 7.9:1, but the umbrellas behind the standfirst hit
+        rgb(231,231,231) — white on white, 1.2:1 — and an average is no use to
+        the person reading the line that crosses one. This darkens only where
+        the words are; the sky and the pool stay bright.
+      */}
+      <div className="pointer-events-none absolute inset-0 [background:radial-gradient(62%_46%_at_50%_46%,rgba(0,0,0,0.52)_0%,rgba(0,0,0,0.3)_55%,transparent_78%)]" />
+      {/* Motes sit above the scrims and below the type. Decorative only. */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+        {MOTES.map(([left, size, duration, delay, opacity], i) => (
+          <span
+            key={i}
+            className="animate-float absolute bottom-0 rounded-full bg-gold"
+            style={{
+              left: `${left}%`,
+              width: `${size}px`,
+              height: `${size}px`,
+              opacity,
+              animationDuration: `${duration}s`,
+              animationDelay: `${delay}s`,
+            }}
+          />
+        ))}
+      </div>
+
+      {/*
+        Centred, and vertically centred rather than bottom-anchored: the point
+        of a cover is that the picture surrounds the words. Nothing else is
+        allowed in here — the credibility facts moved to the band below, which
+        is what lets the frame breathe.
+      */}
+      <div className="relative mx-auto flex min-h-[100svh] max-w-[1080px] flex-col items-center justify-center px-5 py-32 text-center lg:px-10">
         <span
-          className="rise flex items-center gap-3 text-[11px] font-medium tracking-[0.34em] text-white/70 uppercase"
+          className="rise inline-flex items-center gap-3 rounded-full border border-gold/30 bg-gold/12 px-4 py-1.5 text-[10.5px] font-medium tracking-[0.28em] text-gold uppercase backdrop-blur-sm"
           style={{ animationDelay: "120ms" }}
         >
-          <span className="h-px w-8 bg-gold" />
+          <span className="relative flex size-1.5 shrink-0">
+            <span className="animate-dot absolute inset-0 rounded-full bg-gold" />
+            <span className="relative size-1.5 rounded-full bg-gold" />
+          </span>
           Mumbai · MICE, corporate travel &amp; events
         </span>
 
         <h1
-          className="rise display mt-7 max-w-4xl text-[clamp(3rem,8vw,6.5rem)] leading-[0.94] text-white"
+          className="rise display mt-8 text-[clamp(2.9rem,7.4vw,6rem)] leading-[0.96] text-white [text-shadow:0_2px_40px_rgba(0,0,0,0.35)]"
           style={{ animationDelay: "240ms" }}
         >
           We run the room.
@@ -72,7 +134,7 @@ export function Hero() {
         </h1>
 
         <p
-          className="rise mt-8 max-w-lg text-[15.5px] leading-relaxed text-white/80"
+          className="rise mx-auto mt-7 max-w-xl text-[16px] leading-relaxed text-white/85 [text-shadow:0_1px_20px_rgba(0,0,0,0.45)]"
           style={{ animationDelay: "400ms" }}
         >
           Conferences, seminars and incentive programmes for companies and hospitals —
@@ -80,7 +142,7 @@ export function Hero() {
         </p>
 
         <div
-          className="rise mt-10 flex flex-wrap items-center gap-3"
+          className="rise mt-11 flex flex-wrap items-center justify-center gap-3"
           style={{ animationDelay: "520ms" }}
         >
           <Button
@@ -101,22 +163,6 @@ export function Hero() {
           </Button>
         </div>
 
-        {/* Capability strip — the credibility line, without inventing numbers. */}
-        <ul
-          className="rise mt-14 grid gap-x-8 gap-y-5 border-t border-white/15 pt-7 sm:grid-cols-2 lg:grid-cols-4"
-          style={{ animationDelay: "660ms" }}
-        >
-          {CAPABILITY_STRIP.map((item) => (
-            <li key={item.label}>
-              <span className="block text-[13px] leading-snug font-medium text-white text-balance">
-                {item.label}
-              </span>
-              <span className="mt-1 block text-[11px] tracking-wide text-white/50">
-                {item.detail}
-              </span>
-            </li>
-          ))}
-        </ul>
       </div>
 
       <span

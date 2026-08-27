@@ -4,7 +4,7 @@ import { COMPANY } from "@/lib/company";
 
 export function SiteFooter() {
   return (
-    <footer className="mt-auto border-t border-border bg-[color-mix(in_oklch,var(--background),var(--foreground)_3%)]">
+    <footer className="mt-auto border-t border-border bg-[color-mix(in_oklab,var(--background),var(--foreground)_3%)]">
       <div className="mx-auto max-w-[1400px] px-5 py-16 lg:px-10">
         <div className="grid gap-12 lg:grid-cols-[1.5fr_1fr_1fr_1fr_1fr]">
           <div>

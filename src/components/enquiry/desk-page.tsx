@@ -14,7 +14,7 @@ import type { DeskConfig } from "@/lib/enquiry";
 export function DeskPage({ desk, image }: { desk: DeskConfig; image: string }) {
   return (
     <div className="pt-16 sm:pt-[72px]">
-      <section className="border-b border-border bg-[color-mix(in_oklch,var(--background),var(--foreground)_3%)]">
+      <section className="border-b border-border bg-[color-mix(in_oklab,var(--background),var(--foreground)_3%)]">
         <div className="mx-auto max-w-[1400px] px-5 py-14 lg:px-10 lg:py-20">
           <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
             <div>

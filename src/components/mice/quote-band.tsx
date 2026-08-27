@@ -11,16 +11,24 @@ import { photo } from "@/lib/images";
  */
 export function QuoteBand() {
   return (
-    <section className="relative overflow-hidden bg-ink">
+    <section className="relative flex min-h-[68vh] items-center overflow-hidden bg-ink">
+      {/*
+        The photograph carries this band now. At opacity-30 behind a near-solid
+        gradient it was texture on a dark rectangle; at full strength under a
+        weighted scrim it is the last picture on the page, which is what a
+        closing CTA on a travel site should be.
+      */}
       <Photo
         src={photo("1526041092449-209d556f7a32", 2000)}
         fallbackSeed="classis-quote-band"
         alt=""
-        className="absolute inset-0 opacity-30"
+        drift
+        className="absolute inset-0"
       />
-      <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/85 to-ink/40" />
+      <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/80 via-45% to-ink/25" />
+      <div className="absolute inset-0 bg-gradient-to-t from-ink/70 to-transparent" />
 
-      <Reveal className="relative mx-auto max-w-[1400px] px-5 py-20 lg:px-10 lg:py-24">
+      <Reveal className="relative mx-auto w-full max-w-[1400px] px-5 py-24 lg:px-10 lg:py-28">
         <span className="text-[11px] font-medium tracking-[0.24em] text-white/45 uppercase">
           Pricing
         </span>

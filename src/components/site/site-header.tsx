@@ -44,8 +44,16 @@ export function SiteHeader() {
           : "border-b border-border/70 bg-background/85 backdrop-blur-xl"
       )}
     >
-      <div className="mx-auto flex h-16 max-w-[1400px] items-center gap-6 px-5 sm:h-[72px] lg:px-10">
-        <Link href="/" className="group flex shrink-0 flex-col leading-none">
+      {/*
+        Three columns rather than a flex row: the two 1fr rails absorb the logo
+        and the actions, so the nav sits on the container's true centre line and
+        stays there no matter how much wider the action cluster gets than the
+        wordmark. Centring it inside a flex row would only ever centre it in the
+        leftover space. Below `lg` the nav is hidden, the middle column
+        collapses to nothing, and it falls back to logo-left / actions-right.
+      */}
+      <div className="mx-auto grid h-16 max-w-[1400px] grid-cols-[1fr_auto_1fr] items-center gap-6 px-5 sm:h-[72px] lg:px-10">
+        <Link href="/" className="group flex w-fit shrink-0 flex-col leading-none">
           <span
             className={cn(
               "display text-[19px] tracking-[0.14em] uppercase transition-colors sm:text-[21px]",
@@ -64,7 +72,10 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <nav className="ml-4 hidden items-center gap-7 lg:flex">
+        {/* Tighter tracking at the lg tier: at 1024 the action cluster is wider
+            than the wordmark, and at gap-7 the nav cannot reach the centre line
+            without touching it. It opens back up once there is room. */}
+        <nav className="hidden items-center gap-5 lg:flex xl:gap-7">
           {NAV.map((item) => (
             <Link
               key={item.href}
@@ -80,7 +91,7 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="ml-auto flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center justify-end gap-2 sm:gap-3">
           <IconLink
             href="/compare"
             tone={tone}

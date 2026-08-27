@@ -14,12 +14,6 @@ export type ConferenceDestination = {
   /** One line. Resist making this a paragraph — the photograph does the work. */
   note: string;
   image: string;
-  /**
-   * Wide tiles carry the strongest photography. Keep exactly four of them: at
-   * four columns, twelve tiles plus four double-width ones fill four rows with
-   * no ragged tail. Row-spans were tried and always left a hole.
-   */
-  span?: "wide";
 };
 
 export const CONFERENCE_DESTINATIONS: ConferenceDestination[] = [
@@ -29,7 +23,6 @@ export const CONFERENCE_DESTINATIONS: ConferenceDestination[] = [
     country: "United Arab Emirates",
     note: "Purpose-built convention halls with the hotel inventory next door.",
     image: photo("1512453979798-5ea266f8880c", 1600),
-    span: "wide",
   },
   {
     slug: "singapore",
@@ -51,7 +44,6 @@ export const CONFERENCE_DESTINATIONS: ConferenceDestination[] = [
     country: "Indonesia",
     note: "Resort conferencing where the incentive is the venue.",
     image: photo("1537996194471-e657df975ab4", 1200),
-    span: "wide",
   },
   {
     slug: "rome",
@@ -73,7 +65,6 @@ export const CONFERENCE_DESTINATIONS: ConferenceDestination[] = [
     country: "India",
     note: "Palace venues that make a domestic offsite feel international.",
     image: photo("1477587458883-47145ed94245", 1200),
-    span: "wide",
   },
   {
     slug: "kerala",
@@ -94,8 +85,10 @@ export const CONFERENCE_DESTINATIONS: ConferenceDestination[] = [
     city: "Maldives",
     country: "Maldives",
     note: "Whole-island buyouts for board retreats and top-performer trips.",
-    image: photo("1507525428034-b723cf961d3e", 1200),
-    span: "wide",
+    // Overwater villas, not the open beach: the beach frame is the Maldives
+    // journey's hero in the grid below, and a board retreat is sold on the
+    // property anyway.
+    image: photo("1505881502353-a1986add3762", 1200),
   },
   {
     slug: "new-york",
@@ -117,6 +110,11 @@ export type ClientType = {
   slug: string;
   label: string;
   note: string;
+  /**
+   * Kept but unused: the client band is set as type on ink, because these four
+   * were the weakest photographs on the site and the band reads better short.
+   * Here if a page that wants plates ever needs them.
+   */
   image: string;
 };
 
@@ -172,7 +170,9 @@ export const EVENT_FORMATS: EventFormat[] = [
     slug: "incentives",
     label: "Incentive travel",
     note: "Programmes people compete to be sent on.",
-    image: photo("1596436889106-be35e843f974", 900),
+    // The golden-hour resort this used to carry is now the homepage hero; no
+    // photograph is allowed to appear twice on one page.
+    image: photo("1533105079780-92b9be482077", 900),
   },
   {
     slug: "exhibitions",

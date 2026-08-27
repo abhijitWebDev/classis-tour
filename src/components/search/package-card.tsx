@@ -49,21 +49,38 @@ export function PackageCard({ pkg, month }: { pkg: Package; month: number }) {
 
       <div className="flex flex-1 flex-col p-5">
         <div className="flex items-center justify-between gap-3">
-          <span className="tabular text-[11px] font-medium tracking-wide text-muted-foreground">
+          {/* One line, always: "Cusco & the Sacred Valley, Peru" wrapped to two
+              and pushed everything below it a row out of step with its siblings. */}
+          <span
+            className="tabular min-w-0 truncate text-[11px] font-medium tracking-wide text-muted-foreground"
+            title={`${pkg.destination}, ${pkg.country}`}
+          >
             {pkg.destination}, {pkg.country}
           </span>
-          <span className="flex items-center gap-1.5">
+          <span className="flex shrink-0 items-center gap-1.5">
             <Stars value={pkg.rating} />
             <span className="tabular text-[11px] font-semibold">{pkg.rating.toFixed(1)}</span>
           </span>
         </div>
 
-        <h3 className="display mt-2 text-[22px] leading-tight">
+        {/*
+          Fixed slots, not natural height. These cards sit four across in a row
+          you are meant to compare, and a title that wrapped to two lines used to
+          push its card's spec row, tags, price and CTA out of line with its
+          neighbours — a 65px spread across one row. Each variable-length field
+          is clamped and given the height of its longest case, so every rule and
+          label lands on the same baseline in all four cards.
+        */}
+        {/* 2.5em == two lines at leading-tight (1.25), which is what line-clamp-2
+            caps at. Anything less and a two-line title still outgrows the slot. */}
+        <h3 className="display mt-2 line-clamp-2 min-h-[2.5em] text-[22px] leading-tight">
           <Link href={`/packages/${pkg.slug}`} className="after:absolute hover:text-gold">
             {pkg.name}
           </Link>
         </h3>
-        <p className="mt-1.5 text-[13px] leading-relaxed text-muted-foreground">{pkg.tagline}</p>
+        <p className="mt-1.5 line-clamp-2 min-h-[3.25em] text-[13px] leading-relaxed text-muted-foreground">
+          {pkg.tagline}
+        </p>
 
         <dl className="tabular mt-4 grid grid-cols-3 gap-2 border-y border-border py-3 text-[11px]">
           <Spec icon={<Clock className="size-3" />} label="Nights" value={String(pkg.nights)} />
@@ -71,7 +88,7 @@ export function PackageCard({ pkg, month }: { pkg: Package; month: number }) {
           <Spec icon={<Users className="size-3" />} label="Max group" value={String(pkg.groupSizeMax)} />
         </dl>
 
-        <div className="mt-3 flex flex-wrap gap-1">
+        <div className="mt-3 flex min-h-[3.4em] flex-wrap content-start gap-1">
           {pkg.tripTypes.map((t) => (
             <span key={t} className="rounded-full bg-secondary px-2 py-0.5 text-[10.5px] font-medium text-secondary-foreground">
               {TRIP_TYPE_LABEL[t]}
@@ -79,7 +96,8 @@ export function PackageCard({ pkg, month }: { pkg: Package; month: number }) {
           ))}
         </div>
 
-        <div className="mt-5 flex items-end justify-between gap-3 border-t border-border pt-4">
+        {/* mt-auto absorbs any remaining slack so the footer sits on the floor. */}
+        <div className="mt-auto flex items-end justify-between gap-3 border-t border-border pt-4">
           <div>
             <span className="block text-[10px] tracking-[0.16em] text-muted-foreground uppercase">
               Pricing

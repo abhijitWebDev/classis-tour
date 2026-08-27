@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function PackagesPage() {
   return (
     <div className="pt-16 sm:pt-[72px]">
-      <div className="border-b border-border bg-[color-mix(in_oklch,var(--background),var(--foreground)_3%)]">
+      <div className="border-b border-border bg-[color-mix(in_oklab,var(--background),var(--foreground)_3%)]">
         <div className="mx-auto max-w-[1400px] px-5 py-12 lg:px-10">
           <span className="eyebrow">The catalogue</span>
           <h1 className="display mt-3 text-[clamp(2.25rem,5vw,3.5rem)]">Every journey we run</h1>

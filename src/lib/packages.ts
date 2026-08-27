@@ -404,7 +404,6 @@ export const PACKAGES: Package[] = [
     hero: photo("1547471080-7cc2caa01a7e", 2000),
     gallery: [
       { src: photo("1547471080-7cc2caa01a7e", 1200), caption: "Wahiba Sands, late light" },
-      { src: photo("1512453979798-5ea266f8880c", 1200), caption: "Muttrah corniche" },
       { src: photo("1518684079-3c830dcef090", 1200), caption: "Hajar switchbacks" },
       { src: photo("1523805009345-7448845a9e53", 1200), caption: "Wadi pool, Bani Khalid" },
     ],
